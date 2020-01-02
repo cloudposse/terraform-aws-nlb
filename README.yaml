@@ -1,0 +1,117 @@
+---
+#
+# This is the canonical configuration for the `README.md`
+# Run `make readme` to rebuild the `README.md`
+#
+
+# Name of this project
+name: terraform-aws-nlb
+
+# Logo for this project
+#logo: docs/logo.png
+
+# License of this project
+license: "APACHE2"
+
+# Canonical GitHub repo
+github_repo: cloudposse/terraform-aws-nlb
+
+# Badges to display
+badges:
+  - name: "Codefresh Build Status"
+    image: "https://g.codefresh.io/api/badges/pipeline/cloudposse/terraform-modules%2Fterraform-aws-nlb?type=cf-1"
+    url: "https://g.codefresh.io/public/accounts/cloudposse/pipelines/5db7391dfe309d4a2ed304fa"
+  - name: "Latest Release"
+    image: "https://img.shields.io/github/release/cloudposse/terraform-aws-nlb.svg"
+    url: "https://github.com/cloudposse/terraform-aws-nlb/releases/latest"
+  - name: "Slack Community"
+    image: "https://slack.cloudposse.com/badge.svg"
+    url: "https://slack.cloudposse.com"
+
+# Short description of this project
+description: |-
+  Terraform module to create an NLB and a default NLB target and related security groups.
+
+# How to use this project
+usage: |-
+  For a complete example, see [examples/complete](examples/complete).
+
+  For automated test of the complete example using `bats` and `Terratest`, see [test](test).
+
+  ```hcl
+    provider "aws" {
+      region = var.region
+    }
+
+    module "vpc" {
+      source     = "git::https://github.com/cloudposse/terraform-aws-vpc.git?ref=tags/0.8.1"
+      namespace  = var.namespace
+      stage      = var.stage
+      name       = var.name
+      delimiter  = var.delimiter
+      attributes = var.attributes
+      cidr_block = var.vpc_cidr_block
+      tags       = var.tags
+    }
+
+    module "subnets" {
+      source               = "git::https://github.com/cloudposse/terraform-aws-dynamic-subnets.git?ref=tags/0.16.1"
+      availability_zones   = var.availability_zones
+      namespace            = var.namespace
+      stage                = var.stage
+      name                 = var.name
+      attributes           = var.attributes
+      delimiter            = var.delimiter
+      vpc_id               = module.vpc.vpc_id
+      igw_id               = module.vpc.igw_id
+      cidr_block           = module.vpc.vpc_cidr_block
+      nat_gateway_enabled  = false
+      nat_instance_enabled = false
+      tags                 = var.tags
+    }
+
+    module "nlb" {
+      source                                  = "git::https://github.com/cloudposse/terraform-aws-nlb.git?ref=master"
+      namespace                               = var.namespace
+      stage                                   = var.stage
+      name                                    = var.name
+      attributes                              = var.attributes
+      delimiter                               = var.delimiter
+      vpc_id                                  = module.vpc.vpc_id
+      subnet_ids                              = module.subnets.public_subnet_ids
+      internal                                = var.internal
+      tcp_enabled                             = var.tcp_enabled
+      access_logs_enabled                     = var.access_logs_enabled
+      nlb_access_logs_s3_bucket_force_destroy = var.nlb_access_logs_s3_bucket_force_destroy
+      access_logs_region                      = var.access_logs_region
+      cross_zone_load_balancing_enabled       = var.cross_zone_load_balancing_enabled
+      idle_timeout                            = var.idle_timeout
+      ip_address_type                         = var.ip_address_type
+      deletion_protection_enabled             = var.deletion_protection_enabled
+      deregistration_delay                    = var.deregistration_delay
+      health_check_path                       = var.health_check_path
+      health_check_timeout                    = var.health_check_timeout
+      health_check_healthy_threshold          = var.health_check_healthy_threshold
+      health_check_unhealthy_threshold        = var.health_check_unhealthy_threshold
+      health_check_interval                   = var.health_check_interval
+      target_group_port                       = var.target_group_port
+      target_group_target_type                = var.target_group_target_type
+      tags                                    = var.tags
+    }
+  ```
+
+# Other files to include in this README from the project folder
+include:
+  - "docs/targets.md"
+  - "docs/terraform.md"
+
+# Contributors to this project
+contributors:
+  - name: "Erik Osterman"
+    github: "osterman"
+  - name: "Igor Rodionov"
+    github: "goruha"
+  - name: "Andriy Knysh"
+    github: "aknysh"
+  - name: "Sarkis Varozian"
+    github: "sarkis"
