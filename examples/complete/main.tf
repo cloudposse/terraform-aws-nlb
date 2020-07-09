@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 module "vpc" {
-  source     = "git::https://github.com/cloudposse/terraform-aws-vpc.git?ref=tags/0.8.1"
+  source     = "git::https://github.com/cloudposse/terraform-aws-vpc.git?ref=tags/0.14.0"
   namespace  = var.namespace
   stage      = var.stage
   name       = var.name
@@ -14,7 +14,7 @@ module "vpc" {
 }
 
 module "subnets" {
-  source               = "git::https://github.com/cloudposse/terraform-aws-dynamic-subnets.git?ref=tags/0.16.1"
+  source               = "git::https://github.com/cloudposse/terraform-aws-dynamic-subnets.git?ref=tags/0.19.0"
   availability_zones   = var.availability_zones
   namespace            = var.namespace
   stage                = var.stage
@@ -47,10 +47,7 @@ module "nlb" {
   ip_address_type                         = var.ip_address_type
   deletion_protection_enabled             = var.deletion_protection_enabled
   deregistration_delay                    = var.deregistration_delay
-  health_check_path                       = var.health_check_path
-  health_check_timeout                    = var.health_check_timeout
-  health_check_healthy_threshold          = var.health_check_healthy_threshold
-  health_check_unhealthy_threshold        = var.health_check_unhealthy_threshold
+  health_check_threshold                  = var.health_check_threshold
   health_check_interval                   = var.health_check_interval
   target_group_port                       = var.target_group_port
   target_group_target_type                = var.target_group_target_type
