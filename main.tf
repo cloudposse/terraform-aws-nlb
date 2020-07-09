@@ -18,16 +18,23 @@ module "default_label" {
 }
 
 module "access_logs" {
-  source        = "git::https://github.com/cloudposse/terraform-aws-lb-s3-bucket.git?ref=tags/0.3.0"
-  name          = var.name
-  namespace     = var.namespace
-  stage         = var.stage
-  attributes    = compact(concat(var.attributes, ["nlb", "access", "logs"]))
-  delimiter     = var.delimiter
-  tags          = var.tags
-  region        = var.access_logs_region
-  force_destroy = var.nlb_access_logs_s3_bucket_force_destroy
-  enabled       = false # Cannot apparently use encryption with S3 logs for NLB, even if using AES256. See https://github.com/cloudposse/terraform-aws-lb-s3-bucket/issues/9 for discussion.
+  source                             = "git::https://github.com/cloudposse/terraform-aws-lb-s3-bucket.git?ref=tags/0.4.0"
+  name                               = var.name
+  namespace                          = var.namespace
+  stage                              = var.stage
+  attributes                         = compact(concat(var.attributes, ["nlb", "access", "logs"]))
+  delimiter                          = var.delimiter
+  tags                               = var.tags
+  region                             = var.access_logs_region
+  lifecycle_rule_enabled             = var.lifecycle_rule_enabled
+  enable_glacier_transition          = var.enable_glacier_transition
+  expiration_days                    = var.expiration_days
+  glacier_transition_days            = var.glacier_transition_days
+  noncurrent_version_expiration_days = var.noncurrent_version_expiration_days
+  noncurrent_version_transition_days = var.noncurrent_version_transition_days
+  standard_transition_days           = var.standard_transition_days
+  force_destroy                      = var.nlb_access_logs_s3_bucket_force_destroy
+  enabled                            = false # Cannot apparently use encryption with S3 logs for NLB, even if using AES256. See https://github.com/cloudposse/terraform-aws-lb-s3-bucket/issues/9 for discussion.
 }
 
 resource "aws_lb" "default" {
