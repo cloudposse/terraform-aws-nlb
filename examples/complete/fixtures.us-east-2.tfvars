@@ -30,7 +30,7 @@ deregistration_delay = 15
 
 health_check_threshold = 2
 
-health_check_interval = 15
+health_check_interval = 10
 
 health_check_protocol = "HTTP"
 
