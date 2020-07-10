@@ -31,7 +31,7 @@
 | expiration\_days | Number of days after which to expunge s3 logs | `number` | `90` | no |
 | glacier\_transition\_days | Number of days after which to move s3 logs to the glacier storage tier | `number` | `60` | no |
 | health\_check\_enabled | A boolean flag to enable/disable the NLB health checks | `bool` | `true` | no |
-| health\_check\_interval | The duration in seconds in between health checks | `number` | `15` | no |
+| health\_check\_interval | The duration in seconds in between health checks | `number` | `10` | no |
 | health\_check\_path | The destination for the health check request | `string` | `"/"` | no |
 | health\_check\_port | The port to send the health check request to (defaults to `traffic-port`) | `number` | `null` | no |
 | health\_check\_protocol | The protocol to use for the health check request | `string` | `null` | no |
