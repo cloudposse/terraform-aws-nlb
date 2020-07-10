@@ -195,7 +195,7 @@ variable "health_check_threshold" {
 
 variable "health_check_interval" {
   type        = number
-  default     = 15
+  default     = 10
   description = "The duration in seconds in between health checks"
 }
 
