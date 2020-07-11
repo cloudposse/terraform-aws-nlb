@@ -38,11 +38,6 @@ output "nlb_zone_id" {
   value       = module.nlb.nlb_zone_id
 }
 
-output "security_group_id" {
-  description = "The security group ID of the NLB"
-  value       = module.nlb.security_group_id
-}
-
 output "default_target_group_arn" {
   description = "The default target group ARN"
   value       = module.nlb.default_target_group_arn

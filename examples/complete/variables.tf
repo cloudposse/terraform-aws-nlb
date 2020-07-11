@@ -86,19 +86,14 @@ variable "deregistration_delay" {
   description = "The amount of time to wait in seconds before changing the state of a deregistering target to unused"
 }
 
-variable "health_check_timeout" {
-  type        = number
-  description = "The amount of time to wait in seconds before failing a health check request"
-}
-
-variable "health_check_healthy_threshold" {
+variable "health_check_threshold" {
   type        = number
   description = "The number of consecutive health checks successes required before considering an unhealthy target healthy"
 }
 
-variable "health_check_unhealthy_threshold" {
-  type        = number
-  description = "The number of consecutive health check failures required before considering the target unhealthy"
+variable "health_check_protocol" {
+  type        = string
+  description = "The protocol to use for the health check request"
 }
 
 variable "health_check_interval" {

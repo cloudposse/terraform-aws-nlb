@@ -55,10 +55,10 @@ func TestExamplesComplete(t *testing.T) {
 	// Run `terraform output` to get the value of an output variable
 	defaultTargetGroupArn := terraform.Output(t, terraformOptions, "default_target_group_arn")
 	// Verify we're getting back the outputs we expect
-	assert.Contains(t, defaultTargetGroupArn, "arn:aws:elasticloadbalancing:us-east-2:126450723953:targetgroup/eg-test-nlb-default")
+	assert.Contains(t, defaultTargetGroupArn, ":targetgroup/eg-test-nlb-default")
 
 	// Run `terraform output` to get the value of an output variable
 	defaultListenerArn := terraform.Output(t, terraformOptions, "default_listener_arn")
 	// Verify we're getting back the outputs we expect
-	assert.Contains(t, defaultListenerArn, "arn:aws:elasticloadbalancing:us-east-2:126450723953:listener/app/eg-test-nlb")
+	assert.Contains(t, defaultListenerArn, ":listener/net/eg-test-nlb")
 }
