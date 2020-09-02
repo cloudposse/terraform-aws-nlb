@@ -18,7 +18,7 @@ module "default_label" {
 }
 
 module "access_logs" {
-  source                             = "git::https://github.com/cloudposse/terraform-aws-lb-s3-bucket.git?ref=tags/0.4.0"
+  source                             = "git::https://github.com/cloudposse/terraform-aws-lb-s3-bucket.git?ref=tags/0.7.0"
   name                               = var.name
   namespace                          = var.namespace
   stage                              = var.stage
