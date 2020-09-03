@@ -149,6 +149,7 @@ Available targets:
 
 ```
 <!-- markdownlint-restore -->
+<!-- markdownlint-disable -->
 ## Requirements
 
 | Name | Version |
@@ -227,6 +228,7 @@ Available targets:
 | nlb\_zone\_id | The ID of the zone which NLB is provisioned |
 | tls\_listener\_arn | The ARN of the TLS listener |
 
+<!-- markdownlint-restore -->
 
 
 
