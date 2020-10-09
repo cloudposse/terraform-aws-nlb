@@ -33,6 +33,12 @@ variable "tags" {
   default     = {}
 }
 
+variable "environment" {
+  type        = string
+  default     = ""
+  description = "Environment, e.g. 'prod', 'staging', 'dev', 'pre-prod', 'UAT'"
+}
+
 variable "vpc_id" {
   type        = string
   description = "VPC ID to associate with NLB"

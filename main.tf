@@ -8,18 +8,20 @@ locals {
 }
 
 module "default_label" {
-  source     = "git::https://github.com/cloudposse/terraform-null-label.git?ref=tags/0.17.0"
-  attributes = var.attributes
-  delimiter  = var.delimiter
-  name       = var.name
-  namespace  = var.namespace
-  stage      = var.stage
-  tags       = var.tags
+  source      = "git::https://github.com/cloudposse/terraform-null-label.git?ref=tags/0.17.0"
+  attributes  = var.attributes
+  delimiter   = var.delimiter
+  environment = var.environment
+  name        = var.name
+  namespace   = var.namespace
+  stage       = var.stage
+  tags        = var.tags
 }
 
 module "access_logs" {
   source                             = "git::https://github.com/cloudposse/terraform-aws-lb-s3-bucket.git?ref=tags/0.7.0"
   name                               = var.name
+  environment                        = var.environment
   namespace                          = var.namespace
   stage                              = var.stage
   attributes                         = compact(concat(var.attributes, ["nlb", "access", "logs"]))
@@ -58,13 +60,14 @@ resource "aws_lb" "default" {
 }
 
 module "default_target_group_label" {
-  source     = "git::https://github.com/cloudposse/terraform-null-label.git?ref=tags/0.17.0"
-  attributes = concat(var.attributes, ["default"])
-  delimiter  = var.delimiter
-  name       = var.name
-  namespace  = var.namespace
-  stage      = var.stage
-  tags       = var.tags
+  source      = "git::https://github.com/cloudposse/terraform-null-label.git?ref=tags/0.17.0"
+  attributes  = concat(var.attributes, ["default"])
+  delimiter   = var.delimiter
+  environment = var.environment
+  name        = var.name
+  namespace   = var.namespace
+  stage       = var.stage
+  tags        = var.tags
 }
 
 resource "aws_lb_target_group" "default" {
