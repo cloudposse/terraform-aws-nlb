@@ -7,27 +7,8 @@ locals {
   health_check_protocol = coalesce(var.health_check_protocol, local.target_group_protocol)
 }
 
-module "default_label" {
-  source      = "git::https://github.com/cloudposse/terraform-null-label.git?ref=tags/0.17.0"
-  attributes  = var.attributes
-  delimiter   = var.delimiter
-  environment = var.environment
-  name        = var.name
-  namespace   = var.namespace
-  stage       = var.stage
-  tags        = var.tags
-}
-
 module "access_logs" {
-  source                             = "git::https://github.com/cloudposse/terraform-aws-lb-s3-bucket.git?ref=tags/0.7.0"
-  name                               = var.name
-  environment                        = var.environment
-  namespace                          = var.namespace
-  stage                              = var.stage
-  attributes                         = compact(concat(var.attributes, ["nlb", "access", "logs"]))
-  delimiter                          = var.delimiter
-  tags                               = var.tags
-  region                             = var.access_logs_region
+  source                             = "git::https://github.com/cloudposse/terraform-aws-lb-s3-bucket.git?ref=tags/0.9.0"
   lifecycle_rule_enabled             = var.lifecycle_rule_enabled
   enable_glacier_transition          = var.enable_glacier_transition
   expiration_days                    = var.expiration_days
@@ -37,11 +18,13 @@ module "access_logs" {
   standard_transition_days           = var.standard_transition_days
   force_destroy                      = var.nlb_access_logs_s3_bucket_force_destroy
   enabled                            = false # Cannot apparently use encryption with S3 logs for NLB, even if using AES256. See https://github.com/cloudposse/terraform-aws-lb-s3-bucket/issues/9 for discussion.
+
+  context = module.this.context
 }
 
 resource "aws_lb" "default" {
-  name               = module.default_label.id
-  tags               = module.default_label.tags
+  name               = module.this.id
+  tags               = module.this.tags
   internal           = var.internal
   load_balancer_type = "network"
 
@@ -60,14 +43,10 @@ resource "aws_lb" "default" {
 }
 
 module "default_target_group_label" {
-  source      = "git::https://github.com/cloudposse/terraform-null-label.git?ref=tags/0.17.0"
-  attributes  = concat(var.attributes, ["default"])
-  delimiter   = var.delimiter
-  environment = var.environment
-  name        = var.name
-  namespace   = var.namespace
-  stage       = var.stage
-  tags        = var.tags
+  source     = "git::https://github.com/cloudposse/terraform-null-label.git?ref=tags/0.21.0"
+  attributes = concat(var.attributes, ["default"])
+
+  context = module.this.context
 }
 
 resource "aws_lb_target_group" "default" {
