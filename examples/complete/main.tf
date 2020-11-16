@@ -3,39 +3,28 @@ provider "aws" {
 }
 
 module "vpc" {
-  source     = "git::https://github.com/cloudposse/terraform-aws-vpc.git?ref=tags/0.14.0"
-  namespace  = var.namespace
-  stage      = var.stage
-  name       = var.name
-  delimiter  = var.delimiter
-  attributes = var.attributes
+  source = "git::https://github.com/cloudposse/terraform-aws-vpc.git?ref=tags/0.18.0"
+
   cidr_block = var.vpc_cidr_block
-  tags       = var.tags
+
+  context = module.this.context
 }
 
 module "subnets" {
-  source               = "git::https://github.com/cloudposse/terraform-aws-dynamic-subnets.git?ref=tags/0.19.0"
+  source               = "git::https://github.com/cloudposse/terraform-aws-dynamic-subnets.git?ref=tags/0.31.0"
   availability_zones   = var.availability_zones
-  namespace            = var.namespace
-  stage                = var.stage
-  name                 = var.name
-  attributes           = var.attributes
-  delimiter            = var.delimiter
   vpc_id               = module.vpc.vpc_id
   igw_id               = module.vpc.igw_id
   cidr_block           = module.vpc.vpc_cidr_block
   nat_gateway_enabled  = false
   nat_instance_enabled = false
-  tags                 = var.tags
+
+  context = module.this.context
 }
 
 module "nlb" {
-  source                                  = "../.."
-  namespace                               = var.namespace
-  stage                                   = var.stage
-  name                                    = var.name
-  attributes                              = var.attributes
-  delimiter                               = var.delimiter
+  source = "../.."
+
   vpc_id                                  = module.vpc.vpc_id
   subnet_ids                              = module.subnets.public_subnet_ids
   internal                                = var.internal
@@ -51,5 +40,6 @@ module "nlb" {
   health_check_interval                   = var.health_check_interval
   target_group_port                       = var.target_group_port
   target_group_target_type                = var.target_group_target_type
-  tags                                    = var.tags
+
+  context = module.this.context
 }
