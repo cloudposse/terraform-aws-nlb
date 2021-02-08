@@ -46,7 +46,7 @@ access_logs {
 
 module "default_target_group_label" {
   source     = "cloudposse/label/null"
-  version    = "0.22.1"
+  version    = "0.24.1"
   attributes = ["default"]
 
   context = module.this.context
