@@ -8,7 +8,9 @@ locals {
 }
 
 module "access_logs" {
-  source                             = "git::https://github.com/cloudposse/terraform-aws-lb-s3-bucket.git?ref=tags/0.9.0"
+  source  = "cloudposse/lb-s3-bucket/aws"
+  version = "0.11.4"
+
   lifecycle_rule_enabled             = var.lifecycle_rule_enabled
   enable_glacier_transition          = var.enable_glacier_transition
   expiration_days                    = var.expiration_days
@@ -34,17 +36,18 @@ resource "aws_lb" "default" {
   enable_deletion_protection       = var.deletion_protection_enabled
 
   /* TODO: re-enable when bucket encryption issue is resolved for NLBs
-  access_logs {
-    bucket  = module.access_logs.bucket_id
-    prefix  = var.access_logs_prefix
-    enabled = var.access_logs_enabled
-  }
-  */
+access_logs {
+  bucket  = module.access_logs.bucket_id
+  prefix  = var.access_logs_prefix
+  enabled = var.access_logs_enabled
+}
+*/
 }
 
 module "default_target_group_label" {
-  source     = "git::https://github.com/cloudposse/terraform-null-label.git?ref=tags/0.21.0"
-  attributes = concat(var.attributes, ["default"])
+  source     = "cloudposse/label/null"
+  version    = "0.22.1"
+  attributes = ["default"]
 
   context = module.this.context
 }
