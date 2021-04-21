@@ -145,7 +145,6 @@ For automated test of the complete example using `bats` and `Terratest`, see [te
     tcp_enabled                             = var.tcp_enabled
     access_logs_enabled                     = var.access_logs_enabled
     nlb_access_logs_s3_bucket_force_destroy = var.nlb_access_logs_s3_bucket_force_destroy
-    access_logs_region                      = var.access_logs_region
     cross_zone_load_balancing_enabled       = var.cross_zone_load_balancing_enabled
     idle_timeout                            = var.idle_timeout
     ip_address_type                         = var.ip_address_type

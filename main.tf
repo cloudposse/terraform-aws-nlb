@@ -11,6 +11,7 @@ module "access_logs" {
   source  = "cloudposse/lb-s3-bucket/aws"
   version = "0.11.4"
 
+  enabled                            = module.this.enabled && var.access_logs_enabled && var.access_logs_s3_bucket_id == null
   lifecycle_rule_enabled             = var.lifecycle_rule_enabled
   enable_glacier_transition          = var.enable_glacier_transition
   expiration_days                    = var.expiration_days
@@ -19,7 +20,6 @@ module "access_logs" {
   noncurrent_version_transition_days = var.noncurrent_version_transition_days
   standard_transition_days           = var.standard_transition_days
   force_destroy                      = var.nlb_access_logs_s3_bucket_force_destroy
-  enabled                            = false # Cannot apparently use encryption with S3 logs for NLB, even if using AES256. See https://github.com/cloudposse/terraform-aws-lb-s3-bucket/issues/9 for discussion.
 
   context = module.this.context
 }
@@ -35,13 +35,11 @@ resource "aws_lb" "default" {
   ip_address_type                  = var.ip_address_type
   enable_deletion_protection       = var.deletion_protection_enabled
 
-  /* TODO: re-enable when bucket encryption issue is resolved for NLBs
-access_logs {
-  bucket  = module.access_logs.bucket_id
-  prefix  = var.access_logs_prefix
-  enabled = var.access_logs_enabled
-}
-*/
+  access_logs {
+    bucket  = try(element(compact([var.access_logs_s3_bucket_id, module.access_logs.bucket_id]), 0), "")
+    prefix  = var.access_logs_prefix
+    enabled = var.access_logs_enabled
+  }
 }
 
 module "default_target_group_label" {

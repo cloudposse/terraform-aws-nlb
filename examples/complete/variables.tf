@@ -28,9 +28,10 @@ variable "access_logs_enabled" {
   description = "A boolean flag to enable/disable access_logs"
 }
 
-variable "access_logs_region" {
+variable "access_logs_s3_bucket_id" {
   type        = string
-  description = "The region for the access_logs S3 bucket"
+  default     = null
+  description = "An external S3 Bucket name to store access logs in. If specified, no logging bucket will be created."
 }
 
 variable "cross_zone_load_balancing_enabled" {

@@ -18,8 +18,6 @@ access_logs_enabled = true
 
 nlb_access_logs_s3_bucket_force_destroy = true
 
-access_logs_region = "us-east-2"
-
 cross_zone_load_balancing_enabled = false
 
 ip_address_type = "ipv4"
