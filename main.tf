@@ -25,6 +25,7 @@ module "access_logs" {
 }
 
 resource "aws_lb" "default" {
+  #bridgecrew:skip=BC_AWS_NETWORKING_41 - Skipping `Ensure that ALB drops HTTP headers` check. Only valid for Load Balancers of type application.
   name               = module.this.id
   tags               = module.this.tags
   internal           = var.internal
