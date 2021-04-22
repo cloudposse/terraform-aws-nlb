@@ -8,9 +8,15 @@ badges:
 - name: Slack Community
   image: https://slack.cloudposse.com/badge.svg
   url: https://slack.cloudposse.com
+related:
+  - name: terraform-aws-alb
+    description:
+      Terraform module to create an ALB, default ALB listener(s), and a default ALB 
+      target and related security groups.
+    url: https://github.com/cloudposse/terraform-aws-alb
 description: Terraform module to create an NLB and a default NLB target and related
   security groups.
-usage: |-
+examples: |-
   For a complete example, see [examples/complete](examples/complete).
 
   For automated test of the complete example using `bats` and `Terratest`, see [test](test).
@@ -21,41 +27,37 @@ usage: |-
     }
 
     module "vpc" {
-      source     = "git::https://github.com/cloudposse/terraform-aws-vpc.git?ref=tags/0.8.1"
-      namespace  = var.namespace
-      stage      = var.stage
-      name       = var.name
-      delimiter  = var.delimiter
-      attributes = var.attributes
+      source     = "cloudposse/vpc/aws"
+      # Cloud Posse recommends pinning every module to a specific version
+      # version     = "x.x.x"
+
       cidr_block = var.vpc_cidr_block
-      tags       = var.tags
+
+      context = module.this.context
+      namespace = "eg"
+
     }
 
     module "subnets" {
-      source               = "git::https://github.com/cloudposse/terraform-aws-dynamic-subnets.git?ref=tags/0.16.1"
+      source     = "cloudposse/dynamic-subnets/aws"
+      # Cloud Posse recommends pinning every module to a specific version
+      # version     = "x.x.x"
+
       availability_zones   = var.availability_zones
-      namespace            = var.namespace
-      stage                = var.stage
-      name                 = var.name
-      attributes           = var.attributes
-      delimiter            = var.delimiter
       vpc_id               = module.vpc.vpc_id
       igw_id               = module.vpc.igw_id
       cidr_block           = module.vpc.vpc_cidr_block
       nat_gateway_enabled  = false
       nat_instance_enabled = false
-      tags                 = var.tags
+
+      context = module.this.context
+      namespace = "eg"
     }
 
     module "nlb" {
       source = "cloudposse/nlb/aws"
       # Cloud Posse recommends pinning every module to a specific version
       # version = "x.x.x"
-      namespace                               = var.namespace
-      stage                                   = var.stage
-      name                                    = var.name
-      attributes                              = var.attributes
-      delimiter                               = var.delimiter
       vpc_id                                  = module.vpc.vpc_id
       subnet_ids                              = module.subnets.public_subnet_ids
       internal                                = var.internal
@@ -74,7 +76,8 @@ usage: |-
       health_check_interval                   = var.health_check_interval
       target_group_port                       = var.target_group_port
       target_group_target_type                = var.target_group_target_type
-      tags                                    = var.tags
+      
+      context = module.this.context
     }
   ```
 include:
