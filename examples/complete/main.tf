@@ -4,7 +4,7 @@ provider "aws" {
 
 module "vpc" {
   source  = "cloudposse/vpc/aws"
-  version = "0.18.1"
+  version = "0.21.1"
 
   cidr_block = var.vpc_cidr_block
 
@@ -12,8 +12,9 @@ module "vpc" {
 }
 
 module "subnets" {
-  source               = "cloudposse/dynamic-subnets/aws"
-  version              = "0.33.0"
+  source  = "cloudposse/dynamic-subnets/aws"
+  version = "0.39.0"
+
   availability_zones   = var.availability_zones
   vpc_id               = module.vpc.vpc_id
   igw_id               = module.vpc.igw_id
@@ -33,7 +34,6 @@ module "nlb" {
   tcp_enabled                             = var.tcp_enabled
   access_logs_enabled                     = var.access_logs_enabled
   nlb_access_logs_s3_bucket_force_destroy = var.nlb_access_logs_s3_bucket_force_destroy
-  access_logs_region                      = var.access_logs_region
   cross_zone_load_balancing_enabled       = var.cross_zone_load_balancing_enabled
   ip_address_type                         = var.ip_address_type
   deletion_protection_enabled             = var.deletion_protection_enabled
