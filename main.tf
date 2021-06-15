@@ -9,7 +9,7 @@ locals {
 
 module "access_logs" {
   source  = "cloudposse/lb-s3-bucket/aws"
-  version = "0.12.0"
+  version = "0.13.0"
 
   enabled                            = module.this.enabled && var.access_logs_enabled && var.access_logs_s3_bucket_id == null
   lifecycle_rule_enabled             = var.lifecycle_rule_enabled
