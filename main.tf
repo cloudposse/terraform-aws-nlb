@@ -45,7 +45,7 @@ resource "aws_lb" "default" {
 
 module "default_target_group_label" {
   source     = "cloudposse/label/null"
-  version    = "0.24.1"
+  version    = "0.25.0"
   attributes = ["default"]
 
   context = module.this.context
