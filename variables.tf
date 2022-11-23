@@ -152,6 +152,18 @@ variable "deregistration_delay" {
   description = "The amount of time to wait in seconds before changing the state of a deregistering target to unused"
 }
 
+variable "connection_termination" {
+  type        = bool
+  default     = false
+  description = "Whether to terminate connections at the end of the deregistration timeout"
+}
+
+variable "preserve_client_ip" {
+  type        = bool
+  default     = false
+  description = "Whether client IP preservation is enabled"
+}
+
 variable "health_check_enabled" {
   type        = bool
   default     = true

@@ -67,12 +67,14 @@ module "default_target_group_label" {
 }
 
 resource "aws_lb_target_group" "default" {
-  name                 = var.target_group_name == "" ? module.default_target_group_label.id : substr(var.target_group_name, 0, var.target_group_name_max_length)
-  port                 = var.target_group_port
-  protocol             = local.target_group_protocol
-  vpc_id               = var.vpc_id
-  target_type          = var.target_group_target_type
-  deregistration_delay = var.deregistration_delay
+  name                   = var.target_group_name == "" ? module.default_target_group_label.id : substr(var.target_group_name, 0, var.target_group_name_max_length)
+  port                   = var.target_group_port
+  protocol               = local.target_group_protocol
+  vpc_id                 = var.vpc_id
+  target_type            = var.target_group_target_type
+  deregistration_delay   = var.deregistration_delay
+  connection_termination = var.connection_termination
+  preserve_client_ip     = var.preserve_client_ip
 
   health_check {
     enabled             = var.health_check_enabled
