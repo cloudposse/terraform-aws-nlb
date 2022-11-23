@@ -200,6 +200,30 @@ variable "health_check_interval" {
   description = "The duration in seconds in between health checks"
 }
 
+variable "stickiness_enabled" {
+  type        = bool
+  default     = false
+  description = "Whether to enable sticky sessions"
+}
+
+variable "stickiness_type" {
+  type        = string
+  default     = null
+  description = "The type of sticky sessions. The only current possible values are lb_cookie, app_cookie for ALBs, source_ip for NLBs, and source_ip_dest_ip, source_ip_dest_ip_proto for GWLBs."
+}
+
+variable "stickiness_cookie_duration" {
+  type        = number
+  default     = null
+  description = "Only used when stickiness_type is lb_cookie. The time period, in seconds, during which requests from a client should be routed to the same target. After this time period expires, the load balancer-generated cookie is considered stale"
+}
+
+variable "stickiness_cookie_name" {
+  type        = string
+  default     = null
+  description = "Name of the application based cookie. Only needed when type is app_cookie"
+}
+
 variable "nlb_access_logs_s3_bucket_force_destroy" {
   type        = bool
   default     = false

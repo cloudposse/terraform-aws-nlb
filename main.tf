@@ -86,6 +86,13 @@ resource "aws_lb_target_group" "default" {
     interval            = var.health_check_interval
   }
 
+  stickiness {
+    enabled         = var.stickiness_enabled
+    type            = var.stickiness_type
+    cookie_duration = var.stickiness_cookie_duration
+    cookie_name     = var.stickiness_cookie_name
+  }
+
   lifecycle {
     create_before_destroy = true
   }
