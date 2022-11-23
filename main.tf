@@ -30,9 +30,17 @@ module "access_logs" {
   context = module.this.context
 }
 
+module "default_load_balancer_label" {
+  source          = "cloudposse/label/null"
+  version         = "0.25.0"
+  id_length_limit = var.load_balancer_name_max_length
+
+  context = module.this.context
+}
+
 resource "aws_lb" "default" {
   #bridgecrew:skip=BC_AWS_NETWORKING_41 - Skipping `Ensure that ALB drops HTTP headers` check. Only valid for Load Balancers of type application.
-  name               = module.this.id
+  name               = var.load_balancer_name == "" ? module.default_load_balancer_label.id : substr(var.load_balancer_name, 0, var.load_balancer_name_max_length)
   tags               = module.this.tags
   internal           = var.internal
   load_balancer_type = "network"
@@ -50,15 +58,16 @@ resource "aws_lb" "default" {
 }
 
 module "default_target_group_label" {
-  source     = "cloudposse/label/null"
-  version    = "0.25.0"
-  attributes = ["default"]
+  source          = "cloudposse/label/null"
+  version         = "0.25.0"
+  attributes      = ["default"]
+  id_length_limit = var.target_group_name_max_length
 
   context = module.this.context
 }
 
 resource "aws_lb_target_group" "default" {
-  name                 = var.target_group_name == "" ? module.default_target_group_label.id : var.target_group_name
+  name                 = var.target_group_name == "" ? module.default_target_group_label.id : substr(var.target_group_name, 0, var.target_group_name_max_length)
   port                 = var.target_group_port
   protocol             = local.target_group_protocol
   vpc_id               = var.vpc_id

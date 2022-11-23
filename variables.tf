@@ -26,10 +26,28 @@ variable "tcp_enabled" {
   description = "A boolean flag to enable/disable TCP listener"
 }
 
+variable "load_balancer_name" {
+  type        = string
+  default     = ""
+  description = "The name for the default load balancer, uses a module label name if left empty"
+}
+
+variable "load_balancer_name_max_length" {
+  type        = number
+  default     = 32
+  description = "The max length of characters for the load balancer."
+}
+
 variable "target_group_name" {
   type        = string
   default     = ""
   description = "The name for the default target group, uses a module label name if left empty"
+}
+
+variable "target_group_name_max_length" {
+  type        = number
+  default     = 32
+  description = "The max length of characters for the target group."
 }
 
 variable "target_group_port" {
