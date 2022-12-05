@@ -74,15 +74,15 @@ func TestExamplesComplete(t *testing.T) {
 	// Run `terraform output` to get the value of an output variable
 	nlbName := terraform.Output(t, terraformOptionsWithDestroy, "nlb_name")
 	// Verify we're getting back the outputs we expect
-	assert.Equal(t, "eg-test-nlb", nlbName)
+	assert.Equal(t, "eg-test-nlb-" + randID, nlbName)
 
 	// Run `terraform output` to get the value of an output variable
 	defaultTargetGroupArn := terraform.Output(t, terraformOptionsWithDestroy, "default_target_group_arn")
 	// Verify we're getting back the outputs we expect
-	assert.Contains(t, defaultTargetGroupArn, ":targetgroup/eg-test-nlb-default")
+	assert.Contains(t, defaultTargetGroupArn, ":targetgroup/eg-test-nlb-default-" + randID)
 
 	// Run `terraform output` to get the value of an output variable
 	defaultListenerArn := terraform.Output(t, terraformOptionsWithDestroy, "default_listener_arn")
 	// Verify we're getting back the outputs we expect
-	assert.Contains(t, defaultListenerArn, ":listener/net/eg-test-nlb")
+	assert.Contains(t, defaultListenerArn, ":listener/net/eg-test-nlb-" + randID)
 }
