@@ -13,10 +13,10 @@ module "access_logs" {
 
   enabled = module.this.enabled && var.access_logs_enabled && var.access_logs_s3_bucket_id == null
 
-  allow_ssl_requests_only            = var.allow_ssl_requests_only
-  lifecycle_configuration_rules      = var.lifecycle_configuration_rules
-  force_destroy                      = var.nlb_access_logs_s3_bucket_force_destroy
-  force_destroy_enabled              = var.nlb_access_logs_s3_bucket_force_destroy_enabled
+  allow_ssl_requests_only       = var.allow_ssl_requests_only
+  lifecycle_configuration_rules = var.lifecycle_configuration_rules
+  force_destroy                 = var.nlb_access_logs_s3_bucket_force_destroy
+  force_destroy_enabled         = var.nlb_access_logs_s3_bucket_force_destroy_enabled
 
   ## Depricated variables --------------------------
   lifecycle_rule_enabled             = var.lifecycle_rule_enabled
@@ -27,7 +27,7 @@ module "access_logs" {
   noncurrent_version_transition_days = var.noncurrent_version_transition_days
   standard_transition_days           = var.standard_transition_days
   ##-----------------------------------------------
-  
+
   context = module.this.context
 }
 
