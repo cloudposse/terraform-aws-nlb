@@ -23,31 +23,14 @@ func TestExamplesComplete(t *testing.T) {
 		VarFiles: []string{"fixtures.us-east-2.tfvars"},
 		Vars: map[string]interface{}{
 			"attributes": attributes,
-			"nlb_access_logs_s3_bucket_force_destroy": true,
 		},
 	}
-
-	// This will run `terraform init` and `terraform apply` and fail the test if there are any errors
-	terraform.InitAndApply(t, terraformOptions)
-
-	// We need that to follow 'force_destroy' pattern
-	// https://github.com/cloudposse/terraform-aws-s3-log-storage/wiki/Upgrading-to-v0.28.0-and-AWS-provider-v4-(POTENTIAL-DATA-LOSS)#the-safe-way
-	//terraformOptionsWithDestroy := &terraform.Options{
-	//	// The path to where our Terraform code is located
-	//	TerraformDir: "../../examples/complete",
-	//	Upgrade:      true,
-	//	// Variables to pass to our Terraform code using -var-file options
-	//	VarFiles: []string{"fixtures.us-east-2.tfvars"},
-	//	Vars: map[string]interface{}{
-	//		"attributes": attributes,
-	//		"nlb_access_logs_s3_bucket_force_destroy": true,
-	//	},
-	//}
 
 	// At the end of the test, run `terraform destroy` to clean up any resources that were created
 	defer terraform.Destroy(t, terraformOptions)
 
-	// terraform.Apply(t, terraformOptions)
+	// This will run `terraform init` and `terraform apply` and fail the test if there are any errors
+	terraform.InitAndApply(t, terraformOptions)
 
 	// Run `terraform output` to get the value of an output variable
 	vpcCidr := terraform.Output(t, terraformOptions, "vpc_cidr")
