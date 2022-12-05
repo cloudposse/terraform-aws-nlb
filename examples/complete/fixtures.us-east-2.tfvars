@@ -16,7 +16,7 @@ tcp_enabled = true
 
 access_logs_enabled = true
 
-nlb_access_logs_s3_bucket_force_destroy = true
+nlb_access_logs_s3_bucket_force_destroy = false
 
 nlb_access_logs_s3_bucket_force_destroy_enabled = true
 
