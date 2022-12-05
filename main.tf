@@ -14,17 +14,20 @@ module "access_logs" {
   enabled = module.this.enabled && var.access_logs_enabled && var.access_logs_s3_bucket_id == null
 
   allow_ssl_requests_only            = var.allow_ssl_requests_only
-  lifecycle_rule_enabled             = var.lifecycle_rule_enabled
   lifecycle_configuration_rules      = var.lifecycle_configuration_rules
-  enable_glacier_transition          = var.enable_glacier_transition
-  expiration_days                    = var.expiration_days
-  glacier_transition_days            = var.glacier_transition_days
-  noncurrent_version_expiration_days = var.noncurrent_version_expiration_days
-  noncurrent_version_transition_days = var.noncurrent_version_transition_days
-  standard_transition_days           = var.standard_transition_days
   force_destroy                      = var.nlb_access_logs_s3_bucket_force_destroy
   force_destroy_enabled              = var.nlb_access_logs_s3_bucket_force_destroy_enabled
 
+  ## Depricated variables --------------------------
+  lifecycle_rule_enabled             = var.lifecycle_rule_enabled
+  enable_glacier_transition          = var.enable_glacier_transition
+  glacier_transition_days            = var.glacier_transition_days
+  expiration_days                    = var.expiration_days
+  noncurrent_version_expiration_days = var.noncurrent_version_expiration_days
+  noncurrent_version_transition_days = var.noncurrent_version_transition_days
+  standard_transition_days           = var.standard_transition_days
+  ##-----------------------------------------------
+  
   context = module.this.context
 }
 
