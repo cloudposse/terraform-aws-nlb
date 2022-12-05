@@ -11,7 +11,7 @@ module "access_logs" {
   source  = "cloudposse/lb-s3-bucket/aws"
   version = "0.16.0"
 
-  enabled                            = module.this.enabled && var.access_logs_enabled && var.access_logs_s3_bucket_id == null
+  enabled = module.this.enabled && var.access_logs_enabled && var.access_logs_s3_bucket_id == null
 
   allow_ssl_requests_only            = var.allow_ssl_requests_only
   lifecycle_rule_enabled             = var.lifecycle_rule_enabled
