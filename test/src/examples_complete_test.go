@@ -23,7 +23,7 @@ func TestExamplesComplete(t *testing.T) {
 		VarFiles: []string{"fixtures.us-east-2.tfvars"},
 		Vars: map[string]interface{}{
 			"attributes": attributes,
-			"nlb_access_logs_s3_bucket_force_destroy": false,
+			"nlb_access_logs_s3_bucket_force_destroy": true,
 		},
 	}
 
