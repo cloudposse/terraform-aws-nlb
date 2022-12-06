@@ -16,7 +16,6 @@ module "access_logs" {
   allow_ssl_requests_only       = var.allow_ssl_requests_only
   lifecycle_configuration_rules = var.lifecycle_configuration_rules
   force_destroy                 = var.nlb_access_logs_s3_bucket_force_destroy
-  force_destroy_enabled         = var.nlb_access_logs_s3_bucket_force_destroy_enabled
 
   ## Depricated variables --------------------------
   lifecycle_rule_enabled             = var.lifecycle_rule_enabled
