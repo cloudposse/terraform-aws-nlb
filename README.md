@@ -1,4 +1,3 @@
-
 <!-- markdownlint-disable -->
 # terraform-aws-nlb [![Latest Release](https://img.shields.io/github/release/cloudposse/terraform-aws-nlb.svg)](https://github.com/cloudposse/terraform-aws-nlb/releases/latest) [![Slack Community](https://slack.cloudposse.com/badge.svg)](https://slack.cloudposse.com)
 <!-- markdownlint-restore -->
