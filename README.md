@@ -1,3 +1,4 @@
+
 <!-- markdownlint-disable -->
 # terraform-aws-nlb [![Latest Release](https://img.shields.io/github/release/cloudposse/terraform-aws-nlb.svg)](https://github.com/cloudposse/terraform-aws-nlb/releases/latest) [![Slack Community](https://slack.cloudposse.com/badge.svg)](https://slack.cloudposse.com)
 <!-- markdownlint-restore -->
@@ -372,7 +373,7 @@ In general, PRs are welcome. We follow the typical "fork-and-pull" Git workflow.
 
 ## Copyright
 
-Copyright © 2017-2022 [Cloud Posse, LLC](https://cpco.io/copyright)
+Copyright © 2017-2023 [Cloud Posse, LLC](https://cpco.io/copyright)
 
 
 
