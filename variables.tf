@@ -255,5 +255,5 @@ variable "lifecycle_configuration_rules" {
 variable "create_target_group" {
   type        = bool
   default     = true
-  description = "Set `false` to not create the default target group"
+  description = "Set `false` to not create the default target group (and listener)"
 }
