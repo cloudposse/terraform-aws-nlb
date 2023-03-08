@@ -148,7 +148,7 @@ resource "aws_lb_listener" "default" {
   protocol          = local.listener_proto
 
   default_action {
-    target_group_arn = aws_lb_target_group.default.arn
+    target_group_arn = aws_lb_target_group.default[0].arn
     type             = "forward"
   }
 }
@@ -163,7 +163,7 @@ resource "aws_lb_listener" "tls" {
   certificate_arn = var.certificate_arn
 
   default_action {
-    target_group_arn = aws_lb_target_group.default.arn
+    target_group_arn = aws_lb_target_group.default[0].arn
     type             = "forward"
   }
 }
