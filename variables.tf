@@ -252,8 +252,8 @@ variable "lifecycle_configuration_rules" {
     EOT
 }
 
-variable "create_target_group" {
+variable "target_group_enabled" {
   type        = bool
   default     = true
-  description = "Set `false` to not create the default target group (and listener)"
+  description = "Whether or not to create the default target group and listener"
 }

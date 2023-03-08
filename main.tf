@@ -106,8 +106,8 @@ module "default_target_group_label" {
 }
 
 resource "aws_lb_target_group" "default" {
-  count                = local.create_target_group == true ? 1 : 0
   deregistration_delay = var.deregistration_delay
+  count                = var.target_group_enabled ? 1 : 0
   name                 = var.target_group_name == "" ? module.default_target_group_label.id : var.target_group_name
   port                 = var.target_group_port
   protocol             = local.target_group_protocol
