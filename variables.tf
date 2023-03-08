@@ -251,3 +251,9 @@ variable "lifecycle_configuration_rules" {
     **NOTE:** Unless you also set `lifecycle_rule_enabled = false` you will also get the default deprecated rules set on your bucket.
     EOT
 }
+
+variable "create_target_group" {
+  type        = bool
+  default     = true
+  description = "Set `false` to not create the default target group"
+}

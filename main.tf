@@ -11,6 +11,7 @@ locals {
     subnet_id     = var.subnet_ids[idx]
     allocation_id = local.eip_allocation_ids[idx]
   }]
+  create_target_group   = var.create_target_group
 }
 
 module "access_logs" {
@@ -104,6 +105,7 @@ module "default_target_group_label" {
 }
 
 resource "aws_lb_target_group" "default" {
+  count                = local.create_target_group == true ? 1 : 0
   deregistration_delay = var.deregistration_delay
   name                 = var.target_group_name == "" ? module.default_target_group_label.id : var.target_group_name
   port                 = var.target_group_port
