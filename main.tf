@@ -3,7 +3,7 @@ locals {
   listener_proto        = var.tcp_enabled && var.create_target_group? (var.udp_enabled ? "TCP_UDP" : "TCP") : "UDP"
   tcp_port              = var.udp_enabled && var.create_target_group ? var.udp_port : var.tcp_port
   health_check_port     = coalesce(var.health_check_port, "traffic-port")
-  target_group_protocol = var.create_target_group && var.tls_enabled ? "TCP" : local.listener_proto
+  target_group_protocol = var.tls_enabled ? "TCP" : local.listener_proto
   health_check_protocol = coalesce(var.health_check_protocol, local.target_group_protocol)
   unhealthy_threshold   = coalesce(var.health_check_unhealthy_threshold, var.health_check_threshold)
   enabled_generate_eip  = var.subnet_mapping_enabled && length(var.eip_allocation_ids) <= 0
@@ -142,7 +142,7 @@ resource "aws_lb_target_group" "default" {
 }
 
 resource "aws_lb_listener" "default" {
-  count             = var.tcp_enabled ? 1 : (var.udp_enabled ? 1 : 0)
+  count             = local.create_target_group && var.tcp_enabled ? 1 : (var.udp_enabled ? 1 : 0)
   load_balancer_arn = aws_lb.default.arn
   port              = local.listener_port
   protocol          = local.listener_proto
@@ -154,7 +154,7 @@ resource "aws_lb_listener" "default" {
 }
 
 resource "aws_lb_listener" "tls" {
-  count             = var.tls_enabled ? 1 : 0
+  count             = local.create_target_group && var.tls_enabled ? 1 : 0
   load_balancer_arn = aws_lb.default.arn
 
   port            = var.tls_port
