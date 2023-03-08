@@ -142,7 +142,7 @@ resource "aws_lb_target_group" "default" {
 }
 
 resource "aws_lb_listener" "default" {
-  count             = local.create_target_group && var.tcp_enabled ? 1 : (var.udp_enabled ? 1 : 0)
+  count             = local.create_target_group && var.tcp_enabled ? 1 : (local.create_target_group && var.udp_enabled ? 1 : 0)
   load_balancer_arn = aws_lb.default.arn
   port              = local.listener_port
   protocol          = local.listener_proto
