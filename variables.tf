@@ -8,6 +8,22 @@ variable "subnet_ids" {
   description = "A list of subnet IDs to associate with NLB"
 }
 
+variable "subnet_mapping_enabled" {
+  type        = bool
+  default     = false
+  description = "Enable generate EIP for defined subnet ids"
+}
+
+variable "eip_allocation_ids" {
+  type        = list(string)
+  default     = []
+  description = <<-EOT
+    Allocation ID for EIP for subnets. 
+    The length of the list must correspond to the number of defined subnents. 
+    If the `subnet_mapping_enabled` variable is not defined and enabled `subnet_mapping_enabled`, EIPs will be created
+    EOT
+}
+
 variable "internal" {
   type        = bool
   default     = false
@@ -48,6 +64,12 @@ variable "target_group_additional_tags" {
   type        = map(string)
   default     = {}
   description = "The additional tags to apply to the default target group"
+}
+
+variable "eip_additional_tags" {
+  type        = map(string)
+  default     = {}
+  description = "The additional tags to apply to the generated eip"
 }
 
 variable "tls_port" {

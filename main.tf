@@ -30,14 +30,66 @@ module "access_logs" {
   context = module.this.context
 }
 
+module "eip_label" {
+  source     = "cloudposse/label/null"
+  version    = "0.25.0"
+  attributes = ["eip"]
+
+  context = module.this.context
+
+  tags = var.eip_additional_tags
+}
+
+locals {
+  enabled_generate_eip = var.subnet_mapping_enabled && length(var.eip_allocation_ids) <= 0
+}
+
+resource "aws_eip" "lb" {
+  for_each = local.enabled_generate_eip ? toset(var.subnet_ids) : toset([])
+
+  tags = merge(
+    module.eip_label.tags,
+    {
+      "subnet${module.eip_label.delimiter}id" : each.key
+      Name : "${module.eip_label.id}${module.eip_label.delimiter}${each.key}"
+    }
+  )
+}
+
+locals {
+  eip_allocation_ids = var.subnet_mapping_enabled ? (local.enabled_generate_eip ? values(aws_eip.lb).*.allocation_id : var.eip_allocation_ids) : []
+
+  subnet_mapping = [for idx in range(length(local.eip_allocation_ids)) : {
+    subnet_id     = var.subnet_ids[idx]
+    allocation_id = local.eip_allocation_ids[idx]
+  }]
+}
+
+module "lb_label" {
+  source  = "cloudposse/label/null"
+  version = "0.25.0"
+
+  context         = module.this.context
+  id_length_limit = 32
+}
+
 resource "aws_lb" "default" {
   #bridgecrew:skip=BC_AWS_NETWORKING_41 - Skipping `Ensure that ALB drops HTTP headers` check. Only valid for Load Balancers of type application.
-  name               = module.this.id
-  tags               = module.this.tags
+  name               = module.lb_label.id
+  tags               = module.lb_label.tags
   internal           = var.internal
   load_balancer_type = "network"
 
-  subnets                          = var.subnet_ids
+  subnets = var.subnet_mapping_enabled ? null : var.subnet_ids
+
+  dynamic "subnet_mapping" {
+    for_each = local.subnet_mapping
+    content {
+      subnet_id     = subnet_mapping.value["subnet_id"]
+      allocation_id = subnet_mapping.value["allocation_id"]
+    }
+  }
+
   enable_cross_zone_load_balancing = var.cross_zone_load_balancing_enabled
   ip_address_type                  = var.ip_address_type
   enable_deletion_protection       = var.deletion_protection_enabled
@@ -54,7 +106,8 @@ module "default_target_group_label" {
   version    = "0.25.0"
   attributes = ["default"]
 
-  context = module.this.context
+  context         = module.lb_label.context
+  id_length_limit = 32
 }
 
 resource "aws_lb_target_group" "default" {
