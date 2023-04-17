@@ -13,6 +13,8 @@ module "access_logs" {
 
   enabled = module.this.enabled && var.access_logs_enabled && var.access_logs_s3_bucket_id == null
 
+  attributes = compact(concat(module.this.attributes, ["nlb", "access", "logs"]))
+
   allow_ssl_requests_only       = var.allow_ssl_requests_only
   lifecycle_configuration_rules = var.lifecycle_configuration_rules
   force_destroy                 = var.nlb_access_logs_s3_bucket_force_destroy
