@@ -102,6 +102,12 @@ variable "certificate_arn" {
   description = "The ARN of the default SSL certificate for HTTPS listener"
 }
 
+variable "additional_certs" {
+  type        = list(string)
+  description = "A list of additonal certs to add to the https listerner"
+  default     = []
+}
+
 variable "tls_ssl_policy" {
   type        = string
   description = "The name of the SSL Policy for the listener"
