@@ -192,6 +192,12 @@ variable "health_check_threshold" {
   description = "The number of consecutive health checks successes required before considering an unhealthy target healthy, or failures required before considering a health target unhealthy"
 }
 
+variable "health_check_unhealthy_threshold" {
+  type        = number
+  default     = 2
+  description = "The number of consecutive health check failures required before considering the target unhealthy"
+}
+
 variable "health_check_interval" {
   type        = number
   default     = 10
