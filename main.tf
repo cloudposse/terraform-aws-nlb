@@ -13,6 +13,8 @@ module "access_logs" {
 
   enabled = module.this.enabled && var.access_logs_enabled && var.access_logs_s3_bucket_id == null
 
+  attributes = compact(concat(module.this.attributes, ["nlb", "access", "logs"]))
+
   allow_ssl_requests_only       = var.allow_ssl_requests_only
   lifecycle_configuration_rules = var.lifecycle_configuration_rules
   force_destroy                 = var.nlb_access_logs_s3_bucket_force_destroy
@@ -30,9 +32,18 @@ module "access_logs" {
   context = module.this.context
 }
 
+module "default_load_balancer_label" {
+  source          = "cloudposse/label/null"
+  version         = "0.25.0"
+  id_length_limit = var.load_balancer_name_max_length
+
+  context = module.this.context
+}
+
 resource "aws_lb" "default" {
   #bridgecrew:skip=BC_AWS_NETWORKING_41 - Skipping `Ensure that ALB drops HTTP headers` check. Only valid for Load Balancers of type application.
-  name               = module.this.id
+  count              = module.this.enabled ? 1 : 0
+  name               = var.load_balancer_name == "" ? module.default_load_balancer_label.id : substr(var.load_balancer_name, 0, var.load_balancer_name_max_length)
   tags               = module.this.tags
   internal           = var.internal
   load_balancer_type = "network"
@@ -50,21 +61,25 @@ resource "aws_lb" "default" {
 }
 
 module "default_target_group_label" {
-  source     = "cloudposse/label/null"
-  version    = "0.25.0"
-  attributes = ["default"]
+  source          = "cloudposse/label/null"
+  version         = "0.25.0"
+  attributes      = ["default"]
+  id_length_limit = var.target_group_name_max_length
 
   context = module.this.context
 }
 
-resource "aws_lb_target_group" "default" {
-  name                 = var.target_group_name == "" ? module.default_target_group_label.id : var.target_group_name
-  port                 = var.target_group_port
-  protocol             = local.target_group_protocol
-  vpc_id               = var.vpc_id
-  target_type          = var.target_group_target_type
-  deregistration_delay = var.deregistration_delay
 
+resource "aws_lb_target_group" "default" {
+  count                  = module.this.enabled ? 1 : 0
+  name                   = var.target_group_name == "" ? module.default_target_group_label.id : substr(var.target_group_name, 0, var.target_group_name_max_length)
+  port                   = var.target_group_port
+  protocol               = local.target_group_protocol
+  vpc_id                 = var.vpc_id
+  target_type            = var.target_group_target_type
+  deregistration_delay   = var.deregistration_delay
+  connection_termination = var.connection_termination
+  preserve_client_ip     = var.preserve_client_ip
   health_check {
     enabled             = var.health_check_enabled
     port                = local.health_check_port
@@ -79,6 +94,13 @@ resource "aws_lb_target_group" "default" {
     create_before_destroy = true
   }
 
+  stickiness {
+    enabled         = var.stickiness_enabled
+    type            = var.stickiness_type
+    cookie_duration = var.stickiness_cookie_duration
+    cookie_name     = var.stickiness_cookie_name
+  }
+
   tags = merge(
     module.default_target_group_label.tags,
     var.target_group_additional_tags
@@ -90,20 +112,20 @@ resource "aws_lb_target_group" "default" {
 }
 
 resource "aws_lb_listener" "default" {
-  count             = var.tcp_enabled ? 1 : (var.udp_enabled ? 1 : 0)
-  load_balancer_arn = aws_lb.default.arn
+  count             = module.this.enabled && var.tcp_enabled ? 1 : (module.this.enabled && var.udp_enabled ? 1 : 0)
+  load_balancer_arn = join(aws_lb.default.*.arn)
   port              = local.listener_port
   protocol          = local.listener_proto
 
   default_action {
-    target_group_arn = aws_lb_target_group.default.arn
+    target_group_arn = join(aws_lb_target_group.default.*.arn)
     type             = "forward"
   }
 }
 
 resource "aws_lb_listener" "tls" {
-  count             = var.tls_enabled ? 1 : 0
-  load_balancer_arn = aws_lb.default.arn
+  count             = module.this.enabled && var.tls_enabled ? 1 : 0
+  load_balancer_arn = join(aws_lb.default.*.arn)
 
   port            = var.tls_port
   protocol        = "TLS"
@@ -111,7 +133,8 @@ resource "aws_lb_listener" "tls" {
   certificate_arn = var.certificate_arn
 
   default_action {
-    target_group_arn = aws_lb_target_group.default.arn
+    target_group_arn = join(aws_lb_target_group.default.*.arn)
     type             = "forward"
   }
 }
+
