@@ -113,19 +113,19 @@ resource "aws_lb_target_group" "default" {
 
 resource "aws_lb_listener" "default" {
   count             = module.this.enabled && var.tcp_enabled ? 1 : (module.this.enabled && var.udp_enabled ? 1 : 0)
-  load_balancer_arn = join(aws_lb.default.*.arn)
+  load_balancer_arn = join("", aws_lb.default.*.arn)
   port              = local.listener_port
   protocol          = local.listener_proto
 
   default_action {
-    target_group_arn = join(aws_lb_target_group.default.*.arn)
+    target_group_arn = join("", aws_lb_target_group.default.*.arn)
     type             = "forward"
   }
 }
 
 resource "aws_lb_listener" "tls" {
   count             = module.this.enabled && var.tls_enabled ? 1 : 0
-  load_balancer_arn = join(aws_lb.default.*.arn)
+  load_balancer_arn = join("", aws_lb.default.*.arn)
 
   port            = var.tls_port
   protocol        = "TLS"
@@ -133,7 +133,7 @@ resource "aws_lb_listener" "tls" {
   certificate_arn = var.certificate_arn
 
   default_action {
-    target_group_arn = join(aws_lb_target_group.default.*.arn)
+    target_group_arn = join("", aws_lb_target_group.default.*.arn)
     type             = "forward"
   }
 }
