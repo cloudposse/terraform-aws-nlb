@@ -196,7 +196,7 @@ Available targets:
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_access_logs"></a> [access\_logs](#module\_access\_logs) | cloudposse/lb-s3-bucket/aws | 0.16.3 |
+| <a name="module_access_logs"></a> [access\_logs](#module\_access\_logs) | cloudposse/lb-s3-bucket/aws | 0.16.4 |
 | <a name="module_default_target_group_label"></a> [default\_target\_group\_label](#module\_default\_target\_group\_label) | cloudposse/label/null | 0.25.0 |
 | <a name="module_eip_label"></a> [eip\_label](#module\_eip\_label) | cloudposse/label/null | 0.25.0 |
 | <a name="module_lb_label"></a> [lb\_label](#module\_lb\_label) | cloudposse/label/null | 0.25.0 |
@@ -260,6 +260,7 @@ Available targets:
 | <a name="input_noncurrent_version_expiration_days"></a> [noncurrent\_version\_expiration\_days](#input\_noncurrent\_version\_expiration\_days) | (Deprecated, use `lifecycle_configuration_rules` instead)<br>Specifies when non-current object versions expire (in days) | `number` | `90` | no |
 | <a name="input_noncurrent_version_transition_days"></a> [noncurrent\_version\_transition\_days](#input\_noncurrent\_version\_transition\_days) | (Deprecated, use `lifecycle_configuration_rules` instead)<br>Specifies (in days) when noncurrent object versions transition to Glacier Flexible Retrieval | `number` | `30` | no |
 | <a name="input_regex_replace_chars"></a> [regex\_replace\_chars](#input\_regex\_replace\_chars) | Terraform regular expression (regex) string.<br>Characters matching the regex will be removed from the ID elements.<br>If not set, `"/[^a-zA-Z0-9-]/"` is used to remove all characters other than hyphens, letters and digits. | `string` | `null` | no |
+| <a name="input_slow_start"></a> [slow\_start](#input\_slow\_start) | Amount time for targets to warm up before the load balancer sends them a full share of requests. The range is 30-900 seconds or 0 to disable. | `number` | `0` | no |
 | <a name="input_stage"></a> [stage](#input\_stage) | ID element. Usually used to indicate role, e.g. 'prod', 'staging', 'source', 'build', 'test', 'deploy', 'release' | `string` | `null` | no |
 | <a name="input_standard_transition_days"></a> [standard\_transition\_days](#input\_standard\_transition\_days) | (Deprecated, use `lifecycle_configuration_rules` instead)<br>Number of days to persist in the standard storage tier before moving to the infrequent access tier | `number` | `30` | no |
 | <a name="input_subnet_ids"></a> [subnet\_ids](#input\_subnet\_ids) | A list of subnet IDs to associate with NLB | `list(string)` | n/a | yes |
@@ -268,6 +269,7 @@ Available targets:
 | <a name="input_target_group_additional_tags"></a> [target\_group\_additional\_tags](#input\_target\_group\_additional\_tags) | The additional tags to apply to the default target group | `map(string)` | `{}` | no |
 | <a name="input_target_group_name"></a> [target\_group\_name](#input\_target\_group\_name) | The name for the default target group, uses a module label name if left empty | `string` | `""` | no |
 | <a name="input_target_group_port"></a> [target\_group\_port](#input\_target\_group\_port) | The port for the default target group | `number` | `80` | no |
+| <a name="input_target_group_proxy_protocol_v2"></a> [target\_group\_proxy\_protocol\_v2](#input\_target\_group\_proxy\_protocol\_v2) | A boolean flag to enable/disable proxy protocol v2 support | `bool` | `false` | no |
 | <a name="input_target_group_target_type"></a> [target\_group\_target\_type](#input\_target\_group\_target\_type) | The type (`instance`, `ip` or `lambda`) of targets that can be registered with the default target group | `string` | `"ip"` | no |
 | <a name="input_tcp_enabled"></a> [tcp\_enabled](#input\_tcp\_enabled) | A boolean flag to enable/disable TCP listener | `bool` | `true` | no |
 | <a name="input_tcp_port"></a> [tcp\_port](#input\_tcp\_port) | The port for the TCP listener | `number` | `80` | no |

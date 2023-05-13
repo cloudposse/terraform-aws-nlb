@@ -9,7 +9,7 @@ locals {
 
 module "access_logs" {
   source  = "cloudposse/lb-s3-bucket/aws"
-  version = "0.16.3"
+  version = "0.16.4"
 
   enabled = module.this.enabled && var.access_logs_enabled && var.access_logs_s3_bucket_id == null
 
@@ -111,12 +111,14 @@ module "default_target_group_label" {
 }
 
 resource "aws_lb_target_group" "default" {
+  deregistration_delay = var.deregistration_delay
   name                 = var.target_group_name == "" ? module.default_target_group_label.id : var.target_group_name
   port                 = var.target_group_port
   protocol             = local.target_group_protocol
-  vpc_id               = var.vpc_id
+  proxy_protocol_v2    = var.target_group_proxy_protocol_v2
+  slow_start           = var.slow_start
   target_type          = var.target_group_target_type
-  deregistration_delay = var.deregistration_delay
+  vpc_id               = var.vpc_id
 
   health_check {
     enabled             = var.health_check_enabled

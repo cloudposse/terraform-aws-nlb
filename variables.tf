@@ -30,6 +30,12 @@ variable "internal" {
   description = "A boolean flag to determine whether the NLB should be internal"
 }
 
+variable "slow_start" {
+  type        = number
+  default     = 0
+  description = "Amount time for targets to warm up before the load balancer sends them a full share of requests. The range is 30-900 seconds or 0 to disable."
+}
+
 variable "tcp_port" {
   type        = number
   default     = 80
@@ -70,6 +76,12 @@ variable "eip_additional_tags" {
   type        = map(string)
   default     = {}
   description = "The additional tags to apply to the generated eip"
+}
+
+variable "target_group_proxy_protocol_v2" {
+  type        = bool
+  default     = false
+  description = "A boolean flag to enable/disable proxy protocol v2 support"
 }
 
 variable "tls_port" {
