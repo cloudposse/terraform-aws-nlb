@@ -154,7 +154,7 @@ resource "aws_lb_listener" "default" {
 }
 
 resource "aws_lb_listener" "tls" {
-  count             = var.target_group_enabled && var.tls_enabled
+  count             = var.target_group_enabled && var.tls_enabled ? 1 : 0
   load_balancer_arn = aws_lb.default.arn
   port              = var.tls_port
   protocol          = "TLS"
