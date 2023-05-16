@@ -142,7 +142,7 @@ resource "aws_lb_target_group" "default" {
 }
 
 resource "aws_lb_listener" "default" {
-  count             = var.target_group_enabled  && (var.tcp_enabled || var.udp_enabled) ? 1 : 0
+  count             = var.target_group_enabled && (var.tcp_enabled || var.udp_enabled) ? 1 : 0
   load_balancer_arn = aws_lb.default.arn
   port              = local.listener_port
   protocol          = local.listener_proto
@@ -154,14 +154,12 @@ resource "aws_lb_listener" "default" {
 }
 
 resource "aws_lb_listener" "tls" {
-  count                = var.target_group_enabled && var.tls_enabled
-
+  count             = var.target_group_enabled && var.tls_enabled
   load_balancer_arn = aws_lb.default.arn
-
-  port            = var.tls_port
-  protocol        = "TLS"
-  ssl_policy      = var.tls_ssl_policy
-  certificate_arn = var.certificate_arn
+  port              = var.tls_port
+  protocol          = "TLS"
+  ssl_policy        = var.tls_ssl_policy
+  certificate_arn   = var.certificate_arn
 
   default_action {
     target_group_arn = aws_lb_target_group.default[0].arn
