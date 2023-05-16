@@ -106,8 +106,8 @@ module "default_target_group_label" {
 }
 
 resource "aws_lb_target_group" "default" {
+  count                = var.target_group_enabled && (var.tcp_enabled || var.udp_enabled)
   deregistration_delay = var.deregistration_delay
-  count                = var.target_group_enabled ? 1 : 0
   name                 = var.target_group_name == "" ? module.default_target_group_label.id : var.target_group_name
   port                 = var.target_group_port
   protocol             = local.target_group_protocol
@@ -154,7 +154,8 @@ resource "aws_lb_listener" "default" {
 }
 
 resource "aws_lb_listener" "tls" {
-  count             = local.create_target_group == true && var.tls_enabled ? 1 : 0
+  count                = var.target_group_enabled && var.tls_enabled
+
   load_balancer_arn = aws_lb.default.arn
 
   port            = var.tls_port
