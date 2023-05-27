@@ -201,13 +201,13 @@ variable "health_check_path" {
 variable "health_check_threshold" {
   type        = number
   default     = 2
-  description = "The number of consecutive health checks successes required before considering an unhealthy target healthy, or failures required before considering a health target unhealthy"
+  description = "The number of consecutive health checks successes required before considering an unhealthy target healthy."
 }
 
 variable "health_check_unhealthy_threshold" {
   type        = number
-  default     = 2
-  description = "The number of consecutive health check failures required before considering the target unhealthy"
+  default     = null
+  description = "The number of consecutive health check failures required before considering the target unhealthy. If not set using value from `health_check_threshold`"
 }
 
 variable "health_check_interval" {

@@ -1,10 +1,10 @@
 locals {
   listener_port         = var.tcp_enabled ? (var.udp_enabled ? var.udp_port : var.tcp_port) : var.udp_port
   listener_proto        = var.tcp_enabled ? (var.udp_enabled ? "TCP_UDP" : "TCP") : "UDP"
-  tcp_port              = var.udp_enabled ? var.udp_port : var.tcp_port
   health_check_port     = coalesce(var.health_check_port, "traffic-port")
   target_group_protocol = var.tls_enabled ? "TCP" : local.listener_proto
   health_check_protocol = coalesce(var.health_check_protocol, local.target_group_protocol)
+  unhealthy_threshold   = coalesce(var.health_check_unhealthy_threshold, var.health_check_threshold)
 }
 
 module "access_logs" {
@@ -57,7 +57,7 @@ resource "aws_eip" "lb" {
 }
 
 locals {
-  eip_allocation_ids = var.subnet_mapping_enabled ? (local.enabled_generate_eip ? values(aws_eip.lb).*.allocation_id : var.eip_allocation_ids) : []
+  eip_allocation_ids = var.subnet_mapping_enabled ? (local.enabled_generate_eip ? values(aws_eip.lb)[*].allocation_id : var.eip_allocation_ids) : []
 
   subnet_mapping = [for idx in range(length(local.eip_allocation_ids)) : {
     subnet_id     = var.subnet_ids[idx]
@@ -126,7 +126,7 @@ resource "aws_lb_target_group" "default" {
     protocol            = local.health_check_protocol
     path                = local.health_check_protocol == "HTTP" ? var.health_check_path : null
     healthy_threshold   = var.health_check_threshold
-    unhealthy_threshold = var.health_check_unhealthy_threshold
+    unhealthy_threshold = local.unhealthy_threshold
     interval            = var.health_check_interval
   }
 
@@ -172,7 +172,7 @@ resource "aws_lb_listener" "tls" {
 }
 
 resource "aws_lb_listener_certificate" "https_sni" {
-  count           = module.this.enabled && var.tls_enabled && var.additional_certs != [] ? length(var.additional_certs) : 0
-  listener_arn    = join("", aws_lb_listener.tls.*.arn)
+  count           = module.this.enabled && var.tls_enabled && length(var.additional_certs) > 0 ? length(var.additional_certs) : 0
+  listener_arn    = join("", aws_lb_listener.tls[*].arn)
   certificate_arn = var.additional_certs[count.index]
 }
