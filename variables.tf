@@ -182,6 +182,12 @@ variable "health_check_interval" {
   description = "The duration in seconds in between health checks"
 }
 
+variable "health_check_matcher" {
+  type        = string
+  default     = "200"
+  description = "The HTTP codes to use when checking for a successful response from a target"
+}
+
 variable "nlb_access_logs_s3_bucket_force_destroy" {
   type        = bool
   default     = false
