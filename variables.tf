@@ -8,6 +8,22 @@ variable "subnet_ids" {
   description = "A list of subnet IDs to associate with NLB"
 }
 
+variable "subnet_mapping_enabled" {
+  type        = bool
+  default     = false
+  description = "Enable generate EIP for defined subnet ids"
+}
+
+variable "eip_allocation_ids" {
+  type        = list(string)
+  default     = []
+  description = <<-EOT
+    Allocation ID for EIP for subnets. 
+    The length of the list must correspond to the number of defined subnents. 
+    If the `subnet_mapping_enabled` variable is not defined and enabled `subnet_mapping_enabled`, EIPs will be created
+    EOT
+}
+
 variable "internal" {
   type        = bool
   default     = false
@@ -56,6 +72,12 @@ variable "target_group_additional_tags" {
   description = "The additional tags to apply to the default target group"
 }
 
+variable "eip_additional_tags" {
+  type        = map(string)
+  default     = {}
+  description = "The additional tags to apply to the generated eip"
+}
+
 variable "target_group_proxy_protocol_v2" {
   type        = bool
   default     = false
@@ -90,6 +112,12 @@ variable "certificate_arn" {
   type        = string
   default     = ""
   description = "The ARN of the default SSL certificate for HTTPS listener"
+}
+
+variable "additional_certs" {
+  type        = list(string)
+  description = "A list of additonal certs to add to the https listerner"
+  default     = []
 }
 
 variable "tls_ssl_policy" {
@@ -173,7 +201,13 @@ variable "health_check_path" {
 variable "health_check_threshold" {
   type        = number
   default     = 2
-  description = "The number of consecutive health checks successes required before considering an unhealthy target healthy, or failures required before considering a health target unhealthy"
+  description = "The number of consecutive health checks successes required before considering an unhealthy target healthy."
+}
+
+variable "health_check_unhealthy_threshold" {
+  type        = number
+  default     = null
+  description = "The number of consecutive health check failures required before considering the target unhealthy. If not set using value from `health_check_threshold`"
 }
 
 variable "health_check_interval" {
