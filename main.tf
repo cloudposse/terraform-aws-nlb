@@ -5,6 +5,7 @@ locals {
   target_group_protocol = var.tls_enabled ? "TCP" : local.listener_proto
   health_check_protocol = coalesce(var.health_check_protocol, local.target_group_protocol)
   unhealthy_threshold   = coalesce(var.health_check_unhealthy_threshold, var.health_check_threshold)
+  enabled_generate_eip  = var.subnet_mapping_enabled && length(var.eip_allocation_ids) <= 0
 }
 
 module "access_logs" {
@@ -38,10 +39,6 @@ module "eip_label" {
   context = module.this.context
 
   tags = var.eip_additional_tags
-}
-
-locals {
-  enabled_generate_eip = var.subnet_mapping_enabled && length(var.eip_allocation_ids) <= 0
 }
 
 resource "aws_eip" "lb" {
