@@ -6,6 +6,11 @@ locals {
   health_check_protocol = coalesce(var.health_check_protocol, local.target_group_protocol)
   unhealthy_threshold   = coalesce(var.health_check_unhealthy_threshold, var.health_check_threshold)
   enabled_generate_eip  = var.subnet_mapping_enabled && length(var.eip_allocation_ids) <= 0
+  eip_allocation_ids    = var.subnet_mapping_enabled ? (local.enabled_generate_eip ? values(aws_eip.lb)[*].allocation_id : var.eip_allocation_ids) : []
+  subnet_mapping        = [for idx in range(length(local.eip_allocation_ids)) : {
+    subnet_id     = var.subnet_ids[idx]
+    allocation_id = local.eip_allocation_ids[idx]
+  }]
 }
 
 module "access_logs" {
@@ -51,15 +56,6 @@ resource "aws_eip" "lb" {
       Name : "${module.eip_label.id}${module.eip_label.delimiter}${each.key}"
     }
   )
-}
-
-locals {
-  eip_allocation_ids = var.subnet_mapping_enabled ? (local.enabled_generate_eip ? values(aws_eip.lb)[*].allocation_id : var.eip_allocation_ids) : []
-
-  subnet_mapping = [for idx in range(length(local.eip_allocation_ids)) : {
-    subnet_id     = var.subnet_ids[idx]
-    allocation_id = local.eip_allocation_ids[idx]
-  }]
 }
 
 module "lb_label" {
