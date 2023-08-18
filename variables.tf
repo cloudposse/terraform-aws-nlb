@@ -18,8 +18,8 @@ variable "eip_allocation_ids" {
   type        = list(string)
   default     = []
   description = <<-EOT
-    Allocation ID for EIP for subnets. 
-    The length of the list must correspond to the number of defined subnents. 
+    Allocation ID for EIP for subnets.
+    The length of the list must correspond to the number of defined subnents.
     If the `subnet_mapping_enabled` variable is not defined and enabled `subnet_mapping_enabled`, EIPs will be created
     EOT
 }
@@ -82,6 +82,12 @@ variable "target_group_proxy_protocol_v2" {
   type        = bool
   default     = false
   description = "A boolean flag to enable/disable proxy protocol v2 support"
+}
+
+variable "target_group_preserve_client_ip" {
+  type        = bool
+  default     = false
+  description = "A boolean flag to enable/disable client IP preservation."
 }
 
 variable "tls_port" {

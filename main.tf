@@ -108,6 +108,7 @@ resource "aws_lb_target_group" "default" {
   name                 = var.target_group_name == "" ? module.default_target_group_label.id : var.target_group_name
   port                 = var.target_group_port
   protocol             = local.target_group_protocol
+  preserve_client_ip   = var.target_group_preserve_client_ip
   proxy_protocol_v2    = var.target_group_proxy_protocol_v2
   slow_start           = var.slow_start
   target_type          = var.target_group_target_type
