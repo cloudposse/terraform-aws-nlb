@@ -263,6 +263,7 @@ Available targets:
 | <a name="input_subnet_mapping_enabled"></a> [subnet\_mapping\_enabled](#input\_subnet\_mapping\_enabled) | Enable generate EIP for defined subnet ids | `bool` | `false` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | Additional tags (e.g. `{'BusinessUnit': 'XYZ'}`).<br>Neither the tag keys nor the tag values will be modified by this module. | `map(string)` | `{}` | no |
 | <a name="input_target_group_additional_tags"></a> [target\_group\_additional\_tags](#input\_target\_group\_additional\_tags) | The additional tags to apply to the default target group | `map(string)` | `{}` | no |
+| <a name="input_target_group_enabled"></a> [target\_group\_enabled](#input\_target\_group\_enabled) | Whether or not to create the default target group and listener | `bool` | `true` | no |
 | <a name="input_target_group_name"></a> [target\_group\_name](#input\_target\_group\_name) | The name for the default target group, uses a module label name if left empty | `string` | `""` | no |
 | <a name="input_target_group_port"></a> [target\_group\_port](#input\_target\_group\_port) | The port for the default target group | `number` | `80` | no |
 | <a name="input_target_group_preserve_client_ip"></a> [target\_group\_preserve\_client\_ip](#input\_target\_group\_preserve\_client\_ip) | A boolean flag to enable/disable client IP preservation. | `bool` | `false` | no |
