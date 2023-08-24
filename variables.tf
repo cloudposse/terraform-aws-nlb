@@ -251,3 +251,9 @@ variable "lifecycle_configuration_rules" {
     **NOTE:** Unless you also set `lifecycle_rule_enabled = false` you will also get the default deprecated rules set on your bucket.
     EOT
 }
+
+variable "target_group_enabled" {
+  type        = bool
+  default     = true
+  description = "Whether or not to create the default target group and listener"
+}
