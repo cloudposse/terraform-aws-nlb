@@ -113,6 +113,7 @@ resource "aws_lb_target_group" "default" {
   proxy_protocol_v2    = var.target_group_proxy_protocol_v2
   slow_start           = var.slow_start
   target_type          = var.target_group_target_type
+  ip_address_type      = var.target_group_target_type == "ip" ? var.target_ip_address_type : null
   vpc_id               = var.vpc_id
 
   health_check {
