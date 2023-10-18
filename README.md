@@ -144,7 +144,7 @@ For automated test of the complete example using `bats` and `Terratest`, see [te
     deregistration_delay                            = var.deregistration_delay
     health_check_path                               = var.health_check_path
     health_check_timeout                            = var.health_check_timeout
-    health_check_healthy_threshold                  = var.health_check_healthy_threshold
+    health_check_threshold                          = var.health_check_healthy_threshold
     health_check_unhealthy_threshold                = var.health_check_unhealthy_threshold
     health_check_interval                           = var.health_check_interval
     target_group_port                               = var.target_group_port
