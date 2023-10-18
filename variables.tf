@@ -66,6 +66,12 @@ variable "target_group_target_type" {
   description = "The type (`instance`, `ip` or `lambda`) of targets that can be registered with the default target group"
 }
 
+variable "target_ip_address_type" {
+  type        = string
+  default     = "ipv4"
+  description = "The type of IP addresses used by the target group. The possible values are `ipv4` and `ipv6`."
+}
+
 variable "target_group_additional_tags" {
   type        = map(string)
   default     = {}
