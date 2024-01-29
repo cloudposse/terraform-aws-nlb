@@ -13,6 +13,46 @@ locals {
   }]
 }
 
+resource "aws_security_group" "default" {
+  count       = module.this.enabled && var.security_group_enabled ? 1 : 0
+  description = "Controls access to the NLB"
+  vpc_id      = var.vpc_id
+  name        = module.this.id
+  tags        = module.this.tags
+}
+
+resource "aws_security_group_rule" "egress" {
+  count             = module.this.enabled && var.security_group_enabled ? 1 : 0
+  type              = "egress"
+  from_port         = "0"
+  to_port           = "0"
+  protocol          = "-1"
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = one(aws_security_group.default[*].id)
+}
+
+resource "aws_security_group_rule" "default_ingress" {
+  count             = module.this.enabled && var.security_group_enabled && (var.tcp_enabled || var.udp_enabled) ? 1 : 0
+  type              = "ingress"
+  from_port         = local.listener_port
+  to_port           = local.listener_port
+  protocol          = local.listener_proto
+  cidr_blocks       = var.listener_ingress_cidr_blocks
+  prefix_list_ids   = var.listener_ingress_prefix_list_ids
+  security_group_id = one(aws_security_group.default[*].id)
+}
+
+resource "aws_security_group_rule" "tls_ingress" {
+  count             = module.this.enabled && var.security_group_enabled && var.tls_enabled ? 1 : 0
+  type              = "ingress"
+  from_port         = var.tls_port
+  to_port           = var.tls_port
+  protocol          = "tcp"
+  cidr_blocks       = var.tls_ingress_cidr_blocks
+  prefix_list_ids   = var.tls_ingress_prefix_list_ids
+  security_group_id = one(aws_security_group.default[*].id)
+}
+
 module "access_logs" {
   source  = "cloudposse/lb-s3-bucket/aws"
   version = "0.16.4"
@@ -72,6 +112,10 @@ resource "aws_lb" "default" {
   tags               = module.lb_label.tags
   internal           = var.internal
   load_balancer_type = "network"
+
+  security_groups = compact(
+    concat(var.security_group_ids, [one(aws_security_group.default[*].id)]),
+  )
 
   subnets = var.subnet_mapping_enabled ? null : var.subnet_ids
 

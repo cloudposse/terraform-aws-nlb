@@ -132,6 +132,36 @@ variable "additional_certs" {
   default     = []
 }
 
+variable "security_group_enabled" {
+  type        = bool
+  description = "Enables the security group"
+  default     = true
+}
+
+variable "default_ingress_cidr_blocks" {
+  type        = list(string)
+  default     = ["0.0.0.0/0"]
+  description = "List of CIDR blocks to allow in TLS security group"
+}
+
+variable "default_ingress_prefix_list_ids" {
+  type        = list(string)
+  default     = []
+  description = "List of prefix list IDs for allowing access to TLS ingress security group"
+}
+
+variable "tls_ingress_cidr_blocks" {
+  type        = list(string)
+  default     = ["0.0.0.0/0"]
+  description = "List of CIDR blocks to allow in TLS security group"
+}
+
+variable "tls_ingress_prefix_list_ids" {
+  type        = list(string)
+  default     = []
+  description = "List of prefix list IDs for allowing access to TLS ingress security group"
+}
+
 variable "tls_ssl_policy" {
   type        = string
   description = "The name of the SSL Policy for the listener"
