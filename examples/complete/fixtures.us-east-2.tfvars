@@ -35,3 +35,5 @@ health_check_protocol = "HTTP"
 target_group_port = 80
 
 target_group_target_type = "ip"
+
+security_group_enabled = true
