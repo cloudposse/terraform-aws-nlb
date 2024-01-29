@@ -135,7 +135,7 @@ variable "additional_certs" {
 variable "security_group_enabled" {
   type        = bool
   description = "Enables the security group"
-  default     = true
+  default     = false
 }
 
 variable "default_ingress_cidr_blocks" {
