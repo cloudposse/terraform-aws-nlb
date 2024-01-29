@@ -37,8 +37,8 @@ resource "aws_security_group_rule" "default_ingress" {
   from_port         = local.listener_port
   to_port           = local.listener_port
   protocol          = local.listener_proto
-  cidr_blocks       = var.listener_ingress_cidr_blocks
-  prefix_list_ids   = var.listener_ingress_prefix_list_ids
+  cidr_blocks       = var.default_listener_ingress_cidr_blocks
+  prefix_list_ids   = var.default_listener_ingress_prefix_list_ids
   security_group_id = one(aws_security_group.default[*].id)
 }
 

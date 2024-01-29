@@ -8,6 +8,12 @@ variable "subnet_ids" {
   description = "A list of subnet IDs to associate with NLB"
 }
 
+variable "security_group_ids" {
+  type        = list(string)
+  default     = []
+  description = "A list of additional security group IDs to allow access to NLB"
+}
+
 variable "subnet_mapping_enabled" {
   type        = bool
   default     = false
@@ -138,13 +144,13 @@ variable "security_group_enabled" {
   default     = false
 }
 
-variable "default_ingress_cidr_blocks" {
+variable "default_listener_ingress_cidr_blocks" {
   type        = list(string)
   default     = ["0.0.0.0/0"]
   description = "List of CIDR blocks to allow in TLS security group"
 }
 
-variable "default_ingress_prefix_list_ids" {
+variable "default_listener_ingress_prefix_list_ids" {
   type        = list(string)
   default     = []
   description = "List of prefix list IDs for allowing access to TLS ingress security group"
