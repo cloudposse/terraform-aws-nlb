@@ -23,6 +23,11 @@ output "nlb_zone_id" {
   value       = join("", aws_lb.default[*].zone_id)
 }
 
+output "security_group_id" {
+  description = "The security group ID of the NLB"
+  value       = one(aws_security_group.default[*].id)
+}
+
 output "default_target_group_arn" {
   description = "The default target group ARN"
   value       = join("", aws_lb_target_group.default[*].arn)

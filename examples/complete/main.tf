@@ -30,6 +30,7 @@ module "nlb" {
 
   vpc_id                                  = module.vpc.vpc_id
   subnet_ids                              = module.subnets.public_subnet_ids
+  security_group_enabled                  = var.security_group_enabled
   internal                                = var.internal
   tcp_enabled                             = var.tcp_enabled
   access_logs_enabled                     = var.access_logs_enabled
