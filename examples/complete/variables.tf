@@ -83,3 +83,9 @@ variable "target_group_target_type" {
   type        = string
   description = "The type (`instance`, `ip` or `lambda`) of targets that can be registered with the target group"
 }
+
+variable "security_group_enabled" {
+  type        = bool
+  description = "Enables the security group"
+  default     = false
+}
