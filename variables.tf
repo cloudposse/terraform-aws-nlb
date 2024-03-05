@@ -264,6 +264,12 @@ variable "health_check_interval" {
   description = "The duration in seconds in between health checks"
 }
 
+variable "health_check_timeout" {
+  type        = number
+  default     = 10
+  description = "The amount of time, in seconds, during which no response means a failed health check"
+}
+
 variable "nlb_access_logs_s3_bucket_force_destroy" {
   type        = bool
   default     = false

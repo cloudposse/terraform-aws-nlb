@@ -168,6 +168,7 @@ resource "aws_lb_target_group" "default" {
     healthy_threshold   = var.health_check_threshold
     unhealthy_threshold = local.unhealthy_threshold
     interval            = var.health_check_interval
+    timeout             = var.health_check_timeout
   }
 
   lifecycle {
