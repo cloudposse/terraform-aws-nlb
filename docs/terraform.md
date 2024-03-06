@@ -69,6 +69,7 @@
 | <a name="input_glacier_transition_days"></a> [glacier\_transition\_days](#input\_glacier\_transition\_days) | (Deprecated, use `lifecycle_configuration_rules` instead)<br>Number of days after which to move the data to the Glacier Flexible Retrieval storage tier | `number` | `60` | no |
 | <a name="input_health_check_enabled"></a> [health\_check\_enabled](#input\_health\_check\_enabled) | A boolean flag to enable/disable the NLB health checks | `bool` | `true` | no |
 | <a name="input_health_check_interval"></a> [health\_check\_interval](#input\_health\_check\_interval) | The duration in seconds in between health checks | `number` | `10` | no |
+| <a name="input_health_check_timeout"></a> [health\_check\_timeout](#input\_health\_check\_timeout) | The amount of time, in seconds, during which no response means a failed health check | `number` | `null` | no |
 | <a name="input_health_check_path"></a> [health\_check\_path](#input\_health\_check\_path) | The destination for the health check request | `string` | `"/"` | no |
 | <a name="input_health_check_port"></a> [health\_check\_port](#input\_health\_check\_port) | The port to send the health check request to (defaults to `traffic-port`) | `number` | `null` | no |
 | <a name="input_health_check_protocol"></a> [health\_check\_protocol](#input\_health\_check\_protocol) | The protocol to use for the health check request | `string` | `null` | no |

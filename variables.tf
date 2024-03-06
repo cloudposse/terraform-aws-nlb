@@ -266,7 +266,7 @@ variable "health_check_interval" {
 
 variable "health_check_timeout" {
   type        = number
-  default     = 10
+  default     = null
   description = "The amount of time, in seconds, during which no response means a failed health check"
 }
 
