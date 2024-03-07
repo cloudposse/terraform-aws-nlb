@@ -165,7 +165,7 @@ Available targets:
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_access_logs"></a> [access\_logs](#module\_access\_logs) | cloudposse/lb-s3-bucket/aws | 0.16.4 |
+| <a name="module_access_logs"></a> [access\_logs](#module\_access\_logs) | cloudposse/lb-s3-bucket/aws | 0.19.0 |
 | <a name="module_default_target_group_label"></a> [default\_target\_group\_label](#module\_default\_target\_group\_label) | cloudposse/label/null | 0.25.0 |
 | <a name="module_eip_label"></a> [eip\_label](#module\_eip\_label) | cloudposse/label/null | 0.25.0 |
 | <a name="module_lb_label"></a> [lb\_label](#module\_lb\_label) | cloudposse/label/null | 0.25.0 |
