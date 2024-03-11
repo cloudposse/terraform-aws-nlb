@@ -149,16 +149,16 @@ module "default_target_group_label" {
 
 resource "aws_lb_target_group" "default" {
   count                  = var.target_group_enabled ? 1 : 0
-  deregistration_delay   = var.deregistration_delay
   name                   = var.target_group_name == "" ? module.default_target_group_label.id : substr(var.target_group_name, 0, var.target_group_name_max_length)
   port                   = var.target_group_port
   protocol               = local.target_group_protocol
   preserve_client_ip     = var.target_group_preserve_client_ip
   proxy_protocol_v2      = var.target_group_proxy_protocol_v2
-  slow_start             = var.slow_start
   target_type            = var.target_group_target_type
   ip_address_type        = var.target_group_target_type == "ip" ? var.target_group_ip_address_type : null
   vpc_id                 = var.vpc_id
+  slow_start             = var.slow_start
+  deregistration_delay   = var.deregistration_delay
   connection_termination = var.connection_termination
 
   health_check {
