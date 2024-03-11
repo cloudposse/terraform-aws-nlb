@@ -8,10 +8,38 @@ variable "subnet_ids" {
   description = "A list of subnet IDs to associate with NLB"
 }
 
+variable "security_group_ids" {
+  type        = list(string)
+  default     = []
+  description = "A list of additional security group IDs to allow access to NLB"
+}
+
+variable "subnet_mapping_enabled" {
+  type        = bool
+  default     = false
+  description = "Enable generate EIP for defined subnet ids"
+}
+
+variable "eip_allocation_ids" {
+  type        = list(string)
+  default     = []
+  description = <<-EOT
+    Allocation ID for EIP for subnets.
+    The length of the list must correspond to the number of defined subnents.
+    If the `subnet_mapping_enabled` variable is not defined and enabled `subnet_mapping_enabled`, EIPs will be created
+    EOT
+}
+
 variable "internal" {
   type        = bool
   default     = false
   description = "A boolean flag to determine whether the NLB should be internal"
+}
+
+variable "slow_start" {
+  type        = number
+  default     = 0
+  description = "Amount time for targets to warm up before the load balancer sends them a full share of requests. The range is 30-900 seconds or 0 to disable."
 }
 
 variable "tcp_port" {
@@ -62,10 +90,34 @@ variable "target_group_target_type" {
   description = "The type (`instance`, `ip` or `lambda`) of targets that can be registered with the default target group"
 }
 
+variable "target_group_ip_address_type" {
+  type        = string
+  default     = "ipv4"
+  description = "The type of IP addresses used by the target group. The possible values are `ipv4` and `ipv6`."
+}
+
 variable "target_group_additional_tags" {
   type        = map(string)
   default     = {}
   description = "The additional tags to apply to the default target group"
+}
+
+variable "eip_additional_tags" {
+  type        = map(string)
+  default     = {}
+  description = "The additional tags to apply to the generated eip"
+}
+
+variable "target_group_proxy_protocol_v2" {
+  type        = bool
+  default     = false
+  description = "A boolean flag to enable/disable proxy protocol v2 support"
+}
+
+variable "target_group_preserve_client_ip" {
+  type        = bool
+  default     = false
+  description = "A boolean flag to enable/disable client IP preservation."
 }
 
 variable "tls_port" {
@@ -96,6 +148,42 @@ variable "certificate_arn" {
   type        = string
   default     = ""
   description = "The ARN of the default SSL certificate for HTTPS listener"
+}
+
+variable "additional_certs" {
+  type        = list(string)
+  description = "A list of additonal certs to add to the https listerner"
+  default     = []
+}
+
+variable "security_group_enabled" {
+  type        = bool
+  description = "Enables the security group"
+  default     = false
+}
+
+variable "default_listener_ingress_cidr_blocks" {
+  type        = list(string)
+  default     = ["0.0.0.0/0"]
+  description = "List of CIDR blocks to allow in TLS security group"
+}
+
+variable "default_listener_ingress_prefix_list_ids" {
+  type        = list(string)
+  default     = []
+  description = "List of prefix list IDs for allowing access to TLS ingress security group"
+}
+
+variable "tls_ingress_cidr_blocks" {
+  type        = list(string)
+  default     = ["0.0.0.0/0"]
+  description = "List of CIDR blocks to allow in TLS security group"
+}
+
+variable "tls_ingress_prefix_list_ids" {
+  type        = list(string)
+  default     = []
+  description = "List of prefix list IDs for allowing access to TLS ingress security group"
 }
 
 variable "tls_ssl_policy" {
@@ -158,12 +246,6 @@ variable "connection_termination" {
   description = "Whether to terminate connections at the end of the deregistration timeout"
 }
 
-variable "preserve_client_ip" {
-  type        = bool
-  default     = false
-  description = "Whether client IP preservation is enabled"
-}
-
 variable "health_check_enabled" {
   type        = bool
   default     = true
@@ -191,13 +273,25 @@ variable "health_check_path" {
 variable "health_check_threshold" {
   type        = number
   default     = 2
-  description = "The number of consecutive health checks successes required before considering an unhealthy target healthy, or failures required before considering a health target unhealthy"
+  description = "The number of consecutive health checks successes required before considering an unhealthy target healthy."
+}
+
+variable "health_check_unhealthy_threshold" {
+  type        = number
+  default     = null
+  description = "The number of consecutive health check failures required before considering the target unhealthy. If not set using value from `health_check_threshold`"
 }
 
 variable "health_check_interval" {
   type        = number
   default     = 10
   description = "The duration in seconds in between health checks"
+}
+
+variable "health_check_timeout" {
+  type        = number
+  default     = null
+  description = "The amount of time, in seconds, during which no response means a failed health check"
 }
 
 variable "stickiness_enabled" {
@@ -252,4 +346,10 @@ variable "lifecycle_configuration_rules" {
     These rules are not affected by the deprecated `lifecycle_rule_enabled` flag.
     **NOTE:** Unless you also set `lifecycle_rule_enabled = false` you will also get the default deprecated rules set on your bucket.
     EOT
+}
+
+variable "target_group_enabled" {
+  type        = bool
+  default     = true
+  description = "Whether or not to create the default target group and listener"
 }

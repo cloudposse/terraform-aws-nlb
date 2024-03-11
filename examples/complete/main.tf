@@ -4,21 +4,21 @@ provider "aws" {
 
 module "vpc" {
   source  = "cloudposse/vpc/aws"
-  version = "0.21.1"
+  version = "2.1.0"
 
-  cidr_block = var.vpc_cidr_block
+  ipv4_primary_cidr_block = var.vpc_cidr_block
 
   context = module.this.context
 }
 
 module "subnets" {
   source  = "cloudposse/dynamic-subnets/aws"
-  version = "0.39.0"
+  version = "2.4.1"
 
   availability_zones   = var.availability_zones
   vpc_id               = module.vpc.vpc_id
-  igw_id               = module.vpc.igw_id
-  cidr_block           = module.vpc.vpc_cidr_block
+  igw_id               = [module.vpc.igw_id]
+  ipv4_cidr_block      = [module.vpc.vpc_cidr_block]
   nat_gateway_enabled  = false
   nat_instance_enabled = false
 
@@ -30,6 +30,7 @@ module "nlb" {
 
   vpc_id                                  = module.vpc.vpc_id
   subnet_ids                              = module.subnets.public_subnet_ids
+  security_group_enabled                  = var.security_group_enabled
   internal                                = var.internal
   tcp_enabled                             = var.tcp_enabled
   access_logs_enabled                     = var.access_logs_enabled
