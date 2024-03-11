@@ -63,7 +63,7 @@ variable "load_balancer_name" {
 variable "load_balancer_name_max_length" {
   type        = number
   default     = 32
-  description = "The max length of characters for the load balancer."
+  description = "The max length of characters for the load balancer name."
 }
 
 variable "target_group_name" {
@@ -75,7 +75,7 @@ variable "target_group_name" {
 variable "target_group_name_max_length" {
   type        = number
   default     = 32
-  description = "The max length of characters for the target group."
+  description = "The max length of characters for the target group name."
 }
 
 variable "target_group_port" {
