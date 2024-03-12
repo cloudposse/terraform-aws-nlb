@@ -54,10 +54,28 @@ variable "tcp_enabled" {
   description = "A boolean flag to enable/disable TCP listener"
 }
 
+variable "load_balancer_name" {
+  type        = string
+  default     = ""
+  description = "The name for the default load balancer, uses a module label name if left empty"
+}
+
+variable "load_balancer_name_max_length" {
+  type        = number
+  default     = 32
+  description = "The max length of characters for the load balancer name."
+}
+
 variable "target_group_name" {
   type        = string
   default     = ""
   description = "The name for the default target group, uses a module label name if left empty"
+}
+
+variable "target_group_name_max_length" {
+  type        = number
+  default     = 32
+  description = "The max length of characters for the target group name."
 }
 
 variable "target_group_port" {
@@ -222,6 +240,12 @@ variable "deregistration_delay" {
   description = "The amount of time to wait in seconds before changing the state of a deregistering target to unused"
 }
 
+variable "connection_termination" {
+  type        = bool
+  default     = false
+  description = "Whether to terminate connections at the end of the deregistration timeout"
+}
+
 variable "health_check_enabled" {
   type        = bool
   default     = true
@@ -268,6 +292,30 @@ variable "health_check_timeout" {
   type        = number
   default     = null
   description = "The amount of time, in seconds, during which no response means a failed health check"
+}
+
+variable "stickiness_enabled" {
+  type        = bool
+  default     = false
+  description = "Whether to enable sticky sessions"
+}
+
+variable "stickiness_type" {
+  type        = string
+  default     = null
+  description = "The type of sticky sessions. The only current possible values are lb_cookie, app_cookie for ALBs, source_ip for NLBs, and source_ip_dest_ip, source_ip_dest_ip_proto for GWLBs."
+}
+
+variable "stickiness_cookie_duration" {
+  type        = number
+  default     = null
+  description = "Only used when stickiness_type is lb_cookie. The time period, in seconds, during which requests from a client should be routed to the same target. After this time period expires, the load balancer-generated cookie is considered stale"
+}
+
+variable "stickiness_cookie_name" {
+  type        = string
+  default     = null
+  description = "Name of the application based cookie. Only needed when type is app_cookie"
 }
 
 variable "nlb_access_logs_s3_bucket_force_destroy" {
