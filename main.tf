@@ -139,9 +139,9 @@ resource "aws_lb" "default" {
 }
 
 module "default_target_group_label" {
-  source          = "cloudposse/label/null"
-  version         = "0.25.0"
-  attributes      = ["default"]
+  source     = "cloudposse/label/null"
+  version    = "0.25.0"
+  attributes = ["default"]
 
   context         = module.lb_label.context
   id_length_limit = var.target_group_name_max_length
