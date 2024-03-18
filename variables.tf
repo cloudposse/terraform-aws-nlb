@@ -305,3 +305,9 @@ variable "target_group_enabled" {
   default     = true
   description = "Whether or not to create the default target group and listener"
 }
+
+variable "enforce_security_group_inbound_rules_on_private_link_traffic" {
+  type        = string
+  default     = null
+  description = "Indicates whether inbound security group rules are enforced for traffic originating from a PrivateLink. Only valid for Load Balancers of type network. The possible values are on and off."
+}
