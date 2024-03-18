@@ -116,6 +116,7 @@ resource "aws_lb" "default" {
   security_groups = compact(
     concat(var.security_group_ids, [one(aws_security_group.default[*].id)]),
   )
+  enforce_security_group_inbound_rules_on_private_link_traffic = var.enforce_security_group_inbound_rules_on_private_link_traffic
 
   subnets = var.subnet_mapping_enabled ? null : var.subnet_ids
 
