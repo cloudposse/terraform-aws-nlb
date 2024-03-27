@@ -108,6 +108,7 @@ module "lb_label" {
 
 resource "aws_lb" "default" {
   #bridgecrew:skip=BC_AWS_NETWORKING_41 - Skipping `Ensure that ALB drops HTTP headers` check. Only valid for Load Balancers of type application.
+  count              = module.this.enabled ? 1 : 0
   name               = module.lb_label.id
   tags               = module.lb_label.tags
   internal           = var.internal
@@ -188,7 +189,7 @@ resource "aws_lb_target_group" "default" {
 
 resource "aws_lb_listener" "default" {
   count             = var.target_group_enabled && (var.tcp_enabled || var.udp_enabled) ? 1 : 0
-  load_balancer_arn = aws_lb.default.arn
+  load_balancer_arn = one(aws_lb.default[*].arn)
   port              = local.listener_port
   protocol          = local.listener_proto
 
@@ -200,7 +201,7 @@ resource "aws_lb_listener" "default" {
 
 resource "aws_lb_listener" "tls" {
   count             = var.target_group_enabled && var.tls_enabled ? 1 : 0
-  load_balancer_arn = aws_lb.default.arn
+  load_balancer_arn = one(aws_lb.default[*].arn)
   port              = var.tls_port
   protocol          = "TLS"
   ssl_policy        = var.tls_ssl_policy
