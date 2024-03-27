@@ -108,6 +108,7 @@ module "lb_label" {
 
 resource "aws_lb" "default" {
   #bridgecrew:skip=BC_AWS_NETWORKING_41 - Skipping `Ensure that ALB drops HTTP headers` check. Only valid for Load Balancers of type application.
+  count              = module.this.enabled ? 1 : 0
   name               = module.lb_label.id
   tags               = module.lb_label.tags
   internal           = var.internal
