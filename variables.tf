@@ -300,12 +300,6 @@ variable "stickiness_enabled" {
   description = "Whether to enable sticky sessions"
 }
 
-variable "stickiness_type" {
-  type        = string
-  default     = null
-  description = "The type of sticky sessions. The only current possible values are lb_cookie, app_cookie for ALBs, source_ip for NLBs, and source_ip_dest_ip, source_ip_dest_ip_proto for GWLBs."
-}
-
 variable "stickiness_cookie_duration" {
   type        = number
   default     = null
