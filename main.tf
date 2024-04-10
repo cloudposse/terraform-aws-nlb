@@ -173,10 +173,8 @@ resource "aws_lb_target_group" "default" {
   }
 
   stickiness {
-    enabled         = var.stickiness_enabled
-    type            = "source_ip"
-    cookie_duration = var.stickiness_cookie_duration
-    cookie_name     = var.stickiness_cookie_name
+    enabled = var.stickiness_enabled
+    type    = "source_ip"
   }
 
   lifecycle {
