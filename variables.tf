@@ -240,7 +240,7 @@ variable "deregistration_delay" {
   description = "The amount of time to wait in seconds before changing the state of a deregistering target to unused"
 }
 
-variable "connection_termination" {
+variable "connection_termination_enabled" {
   type        = bool
   default     = false
   description = "Whether to terminate connections at the end of the deregistration timeout"

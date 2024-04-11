@@ -161,7 +161,7 @@ resource "aws_lb_target_group" "default" {
   vpc_id                 = var.vpc_id
   slow_start             = var.slow_start
   deregistration_delay   = var.deregistration_delay
-  connection_termination = var.connection_termination
+  connection_termination = var.connection_termination_enabled
 
   health_check {
     enabled             = var.health_check_enabled
