@@ -255,3 +255,60 @@ variable "stickiness_cookie_name" {
   description = "Name of the application based cookie. Only needed when type is app_cookie"
 }
 
+variable "http_enabled" {
+  type        = bool
+  default     = true
+  description = "A boolean flag to enable/disable HTTP listener"
+}
+
+variable "http_ingress_cidr_blocks" {
+  type        = list(string)
+  default     = ["0.0.0.0/0"]
+  description = "List of CIDR blocks to allow in HTTP security group"
+}
+
+variable "http_ingress_prefix_list_ids" {
+  type        = list(string)
+  default     = []
+  description = "List of prefix list IDs for allowing access to HTTP ingress security group"
+}
+variable "https_ingress_cidr_blocks" {
+  type        = list(string)
+  default     = ["0.0.0.0/0"]
+  description = "List of CIDR blocks to allow in HTTPS security group"
+}
+
+variable "https_ingress_prefix_list_ids" {
+  type        = list(string)
+  default     = []
+  description = "List of prefix list IDs for allowing access to HTTPS ingress security group"
+}
+variable "https_port" {
+  type        = number
+  default     = 443
+  description = "The port for the HTTPS listener"
+}
+
+variable "http_port" {
+  type        = number
+  default     = 80
+  description = "The port for the HTTP listener"
+}
+
+variable "security_group_enabled" {
+  type        = bool
+  description = "Enables the security group"
+  default     = true
+}
+
+variable "https_enabled" {
+  type        = bool
+  default     = false
+  description = "A boolean flag to enable/disable HTTPS listener"
+}
+
+variable "security_group_ids" {
+  type        = list(string)
+  default     = []
+  description = "A list of additional security group IDs to allow access to ALB"
+}
