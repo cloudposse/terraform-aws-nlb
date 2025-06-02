@@ -1,12 +1,16 @@
 locals {
   listener_port         = var.tcp_enabled ? (var.udp_enabled ? var.udp_port : var.tcp_port) : var.udp_port
   listener_proto        = var.tcp_enabled ? (var.udp_enabled ? "TCP_UDP" : "TCP") : "UDP"
-  health_check_port     = coalesce(var.health_check_port, "traffic-port")
   target_group_protocol = var.tls_enabled ? "TCP" : local.listener_proto
-  health_check_protocol = coalesce(var.health_check_protocol, local.target_group_protocol)
-  unhealthy_threshold   = coalesce(var.health_check_unhealthy_threshold, var.health_check_threshold)
-  enabled_generate_eip  = var.subnet_mapping_enabled && length(var.eip_allocation_ids) <= 0
-  eip_allocation_ids    = var.subnet_mapping_enabled ? (local.enabled_generate_eip ? values(aws_eip.lb)[*].allocation_id : var.eip_allocation_ids) : []
+
+  health_check_port                = coalesce(var.health_check_port, "traffic-port")
+  health_check_protocol            = coalesce(var.health_check_protocol, local.target_group_protocol)
+  health_check_path                = can(regex("^HTTPS?$", local.health_check_protocol)) ? var.health_check_path : null
+  health_check_unhealthy_threshold = coalesce(var.health_check_unhealthy_threshold, var.health_check_threshold)
+
+  enabled_generate_eip = var.subnet_mapping_enabled && length(var.eip_allocation_ids) <= 0
+  eip_allocation_ids   = var.subnet_mapping_enabled ? (local.enabled_generate_eip ? values(aws_eip.lb)[*].allocation_id : var.eip_allocation_ids) : []
+
   subnet_mapping = [for idx in range(length(local.eip_allocation_ids)) : {
     subnet_id     = var.subnet_ids[idx]
     allocation_id = local.eip_allocation_ids[idx]
@@ -167,9 +171,10 @@ resource "aws_lb_target_group" "default" {
     enabled             = var.health_check_enabled
     port                = local.health_check_port
     protocol            = local.health_check_protocol
-    path                = local.health_check_protocol == "HTTP" ? var.health_check_path : null
+    path                = local.health_check_path
+    matcher             = var.health_check_matcher
     healthy_threshold   = var.health_check_threshold
-    unhealthy_threshold = local.unhealthy_threshold
+    unhealthy_threshold = local.health_check_unhealthy_threshold
     interval            = var.health_check_interval
     timeout             = var.health_check_timeout
   }
