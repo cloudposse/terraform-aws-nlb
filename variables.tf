@@ -294,6 +294,12 @@ variable "health_check_timeout" {
   description = "The amount of time, in seconds, during which no response means a failed health check"
 }
 
+variable "health_check_matcher" {
+  type        = string
+  default     = null
+  description = "The HTTP or gRPC codes to use when checking for a successful response from a target, values can be comma-separated individual values or a range of values"
+}
+
 variable "stickiness_enabled" {
   type        = bool
   default     = false
